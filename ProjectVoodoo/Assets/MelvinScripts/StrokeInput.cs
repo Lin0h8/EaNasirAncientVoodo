@@ -6,6 +6,7 @@ public class StrokeInput : MonoBehaviour
     public Recognizer recognizer;
     private List<Vector2> currentStroke = new List<Vector2>();
     public StrokeTemplate[] templates;
+    public SpellCastingManager spellCastingManager;
 
     private void Awake()
     {
@@ -38,11 +39,11 @@ public class StrokeInput : MonoBehaviour
             if (currentStroke.Count > 0)
             {
                 (string name, float score) = recognizer.Recognize(currentStroke);
-                for (int i = 0; i < currentStroke.Count - 1; i++)
-                {
-                    Debug.Log($"Point {i}: {currentStroke[i]}");
-                }
                 Debug.Log($"Recognized: {name} with score {score}");
+                if (spellCastingManager != null)
+                {
+                    spellCastingManager.RegisterRune(name);
+                }
             }
         }
     }
