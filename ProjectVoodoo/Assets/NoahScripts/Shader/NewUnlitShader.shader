@@ -91,7 +91,7 @@ Shader "Unlit/NewUnlitShader"
             {
                 // Sample texture
                 float2 uv = floor(i.uv * _PixelSize) / _PixelSize;
-                float3 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv).rgb;
+                float3 albedo = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv).rgb;
 
                 float3 normal = normalize(i.normal);
                 // Light MainLight = GetMainLight();
@@ -120,7 +120,7 @@ float3 totalLight = mainLight.color * NdotL;
                     float3 diffuse = add.color.rgb * NdotL * add.distanceAttenuation * add.shadowAttenuation;
                     //diffuse = floor(colo * _LightPixelationLevel) / _LightPixelationLevel;
                     //diffuse = floor(diffuse * _LightPixelationLevel) / _LightPixelationLevel;
-                    diffuse = clamp(diffuse, 5, 50);
+                    //diffuse = clamp(diffuse, 0, );
                     totalLight += diffuse;
                 }
                 totalLight = saturate(totalLight);
