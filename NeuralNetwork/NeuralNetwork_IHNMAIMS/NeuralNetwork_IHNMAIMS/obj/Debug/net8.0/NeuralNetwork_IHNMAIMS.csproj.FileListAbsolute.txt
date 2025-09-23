@@ -1,0 +1,14 @@
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\bin\Debug\net8.0\NeuralNetwork_IHNMAIMS.exe
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\bin\Debug\net8.0\NeuralNetwork_IHNMAIMS.deps.json
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\bin\Debug\net8.0\NeuralNetwork_IHNMAIMS.runtimeconfig.json
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\bin\Debug\net8.0\NeuralNetwork_IHNMAIMS.dll
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\bin\Debug\net8.0\NeuralNetwork_IHNMAIMS.pdb
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.AssemblyInfo.cs
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.dll
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\refint\NeuralNetwork_IHNMAIMS.dll
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.pdb
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\NeuralNetwork_IHNMAIMS.genruntimeconfig.cache
+C:\Users\User\source\repos\NeuralNetwork_IHNMAIMS\NeuralNetwork_IHNMAIMS\obj\Debug\net8.0\ref\NeuralNetwork_IHNMAIMS.dll
