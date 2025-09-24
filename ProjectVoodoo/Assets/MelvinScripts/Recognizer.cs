@@ -11,7 +11,7 @@ public class Recognizer
     //VECTOR2 WAS POINT BEFORE...
 
     //SETTINGS
-    private const int NumPoints = 64;
+    private const int NumPoints = 128;
 
     private const float SquareSize = 250.0f;
     //-------------------
@@ -21,11 +21,15 @@ public class Recognizer
     public (string Name, float Score) Recognize(List<Vector2> points)
     {
         List<Vector2> normPoint = Normalize(points);
+        List<Vector2> mirroredPoint = MirrorHorizontally(normPoint);
         float minDistance = float.MaxValue;
         string bestTemplate = "No match";
         foreach (var template in templates)
         {
-            float d = PathDistance(normPoint, template.Points);
+            float dOriginal = PathDistance(normPoint, template.Points);
+            float dMirrored = PathDistance(mirroredPoint, template.Points);
+
+            float d = Mathf.Min(dOriginal, dMirrored);
             if (d < minDistance)
             {
                 minDistance = d;
@@ -34,6 +38,16 @@ public class Recognizer
         }
         float score = 1.0f - (minDistance / (0.5f * (float)Math.Sqrt(SquareSize * SquareSize + SquareSize * SquareSize)));
         return (bestTemplate, score);
+    }
+
+    private List<Vector2> MirrorHorizontally(List<Vector2> points)
+    {
+        List<Vector2> mirrored = new List<Vector2>();
+        foreach (var p in points)
+        {
+            mirrored.Add(new Vector2(-p.x, p.y));
+        }
+        return mirrored;
     }
 
     public void AddTemplate(string name, List<Vector2> points)
@@ -45,7 +59,7 @@ public class Recognizer
     public List<Vector2> Normalize(List<Vector2> points)
     {
         points = Resample(points, NumPoints);
-        points = RotateToZero(points);
+        //points = RotateToZero(points); // Borttagen för att urskilja rotation
         points = ScaleToSquare(points, SquareSize);
         points = TranslateToOrigin(points);
 
@@ -108,7 +122,7 @@ public class Recognizer
         List<Vector2> newPoints = new List<Vector2>();
         foreach (Vector2 p in points)
         {
-            float qx = p.x - c.y;
+            float qx = p.x - c.x;
             float qy = p.y - c.y;
             newPoints.Add(new Vector2(qx, qy));
         }
@@ -180,6 +194,14 @@ public class Recognizer
         for (int i = 0; i < pts1.Count; i++)
         {
             d += Distance(pts1[i], pts2[i]);
+
+            if (i > 0)
+            {
+                Vector2 v1 = pts1[i] - pts1[i - 1];
+                Vector2 v2 = pts2[i] - pts2[i - 1];
+                float angle = Vector2.Angle(v1, v2) / 180f;
+                d += angle * 20f;
+            }
         }
         return d / pts1.Count;
     }
