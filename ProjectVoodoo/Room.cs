@@ -9,6 +9,13 @@ namespace Unity.Timeline
     internal class Room
     {
         int connections;
+        
         bool isActive = false;
+        public int[,] TileMap = new int[10, 10];
+        int Rings;
+        public void SidePropertyDecider()
+        {
+
+        }
     }
 }
