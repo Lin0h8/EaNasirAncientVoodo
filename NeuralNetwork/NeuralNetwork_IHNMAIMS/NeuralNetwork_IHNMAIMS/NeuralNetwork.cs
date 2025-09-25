@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace NeuralNetwork_IHNMAIMS
 {
+    public class NetworkData
+    {
+        public int[] Layers { get; set; }
+        public ActivationType[] Activations { get; set; }
+        public float[][][] Weights { get; set; }
+        public float[][] Biases { get; set; }
+    }
+
     public enum ActivationType
     {
         Sigmoid,
@@ -26,7 +34,7 @@ namespace NeuralNetwork_IHNMAIMS
 
         public NeuralNetwork(int[] layers, ActivationType[] activations)
         {
-            if (layers.Length != activations.Length)
+            if ((layers.Length - 1) != activations.Length)
                 throw new ArgumentException("Each layer must have an activation type.");
 
             this.layers = layers;
@@ -98,7 +106,7 @@ namespace NeuralNetwork_IHNMAIMS
                     tempValues[j] = sum;
                 }
 
-                if (i == layers.Length - 1 && activations[i] == ActivationType.Softmax)
+                if (i == layers.Length - 1 && activations[i - 1] == ActivationType.Softmax)
                 {
                     neurons[i] = Softmax(tempValues);
                 }
@@ -106,7 +114,7 @@ namespace NeuralNetwork_IHNMAIMS
                 {
                     for (int j = 0; j < layers[i]; j++)
                     {
-                        neurons[i][j] = ApplyActivation(tempValues[j], activations[i]);
+                        neurons[i][j] = ApplyActivation(tempValues[j], activations[i - 1]);
                     }
                 }
             }
@@ -171,10 +179,7 @@ namespace NeuralNetwork_IHNMAIMS
                         int idx = indices[batchStart + i];
                         var output = FeedForward(inputs[idx]);
                         Backpropagate(expectedOutputs[idx]);
-                        for (int j = 0; j < output.Length; j++)
-                        {
-                            totalLoss += CrossEntropyLoss(output, expectedOutputs[idx]);
-                        }
+                        totalLoss += CrossEntropyLoss(output, expectedOutputs[idx]);
                     }
                     ApplyGradients(learningRate, actualBatchSize);
                 }
@@ -199,7 +204,10 @@ namespace NeuralNetwork_IHNMAIMS
                 float[] deltas = new float[layers[i + 1]];
                 for (int j = 0; j < layers[i + 1]; j++)
                 {
-                    deltas[j] = errors[i + 1][j] * ActivationDerivative(neurons[i + 1][j], activations[i + 1]);
+                    if (activations[i] != ActivationType.Softmax)
+                        deltas[j] = errors[i + 1][j] * ActivationDerivative(neurons[i + 1][j], activations[i]);
+                    else
+                        deltas[j] = errors[i + 1][j];
                 }
 
                 for (int j = 0; j < layers[i]; j++)
@@ -246,7 +254,7 @@ namespace NeuralNetwork_IHNMAIMS
             float loss = 0;
             for (int i = 0; i < predicted.Length; i++)
             {
-                float p = Math.Clamp(predicted[i], 1e-15f, 1 - 1e-15f);
+                float p = Math.Clamp(predicted[i], 1e-7f, 1 - 1e-7f);
                 loss -= expected[i] * (float)Math.Log(p);
             }
             return loss;
@@ -268,6 +276,37 @@ namespace NeuralNetwork_IHNMAIMS
                 expValues[i] /= sumExp;
             }
             return expValues;
+        }
+
+        public void Save(string filePath)
+        {
+            var data = new NetworkData
+            {
+                Layers = layers,
+                Activations = activations,
+                Weights = weights,
+                Biases = biases
+            };
+            var options = new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            var json = System.Text.Json.JsonSerializer.Serialize(data, options);
+            System.IO.File.WriteAllText(filePath, json);
+        }
+
+        public static NeuralNetwork Load(string filePath)
+        {
+            var json = System.IO.File.ReadAllText(filePath);
+            var data = System.Text.Json.JsonSerializer.Deserialize<NetworkData>(json);
+            if (data == null)
+                throw new Exception("Failed to deserialize network data.");
+            var nn = new NeuralNetwork(data.Layers, data.Activations)
+            {
+                weights = data.Weights,
+                biases = data.Biases
+            };
+            return nn;
         }
     }
 }

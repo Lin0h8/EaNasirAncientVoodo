@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "eOf99+bO4Hg=",
+  "dgSpecHash": "VNXOhL/4Tuc=",
   "success": true,
   "projectFilePath": "F:\\GitHubGame1\\EaNasirAncientVoodo\\NeuralNetwork\\NeuralNetwork_IHNMAIMS\\NeuralNetwork_IHNMAIMS\\NeuralNetwork_IHNMAIMS.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.9\\microsoft.win32.systemevents.9.0.9.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.drawing.common\\9.0.9\\system.drawing.common.9.0.9.nupkg.sha512"
+  ],
   "logs": []
 }

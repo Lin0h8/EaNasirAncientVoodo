@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NeuralNetwork_IHNMAIMS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b3a8aa48a2d2eb9950141b464697bbe1092e2fd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c03d696f217070b58954902140fa1c92b7938b76")]
 [assembly: System.Reflection.AssemblyProductAttribute("NeuralNetwork_IHNMAIMS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NeuralNetwork_IHNMAIMS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

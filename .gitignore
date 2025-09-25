@@ -1,0 +1,2 @@
+# Ignore dataset folder inside Debug/net8.0
+NeuralNetwork/NeuralNetwork_IHNMAIMS/NeuralNetwork_IHNMAIMS/bin/Debug/net8.0/dataset/
