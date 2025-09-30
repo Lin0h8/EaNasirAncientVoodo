@@ -52,7 +52,9 @@
 //        }
 //    }
 //}
+using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 //using static UnityEditor.PlayerSettings;
@@ -70,7 +72,7 @@ public class DungeonGenerationScript : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject[] roomPrefab;
     public GameObject wallPrefab;
-    
+    public GameObject corridorTilePrefab;
     
     public float GridSize;
     private List<GameObject> dungeonRooms = new List<GameObject>();
@@ -80,6 +82,7 @@ public class DungeonGenerationScript : MonoBehaviour
     {
         
         GenerateDungeon();
+        
         updateDungeonRoomPositions();
         
     }
@@ -91,7 +94,8 @@ public class DungeonGenerationScript : MonoBehaviour
         {
             
             GameObject room = Instantiate(roomPrefab[Random.Range(0, roomPrefab.Length)]);
-            GridSize = (room.transform.Find("floor").transform.GetComponent<Renderer>().bounds.extents.x * 2);
+           
+            GridSize = (room.transform.transform.GetComponent<Renderer>().bounds.extents.x * 2);
             float x = Random.Range(0, width);
             float y = Random.Range(0, height);
             Vector3 pos = new Vector3(x * room.transform.localScale.x, 0, y * room.transform.localScale.z);
@@ -99,12 +103,17 @@ public class DungeonGenerationScript : MonoBehaviour
             pos = SnapToGrid(pos, GridSize);
             room.transform.position = pos;
 
-            room.transform.rotation = Quaternion.Euler(new Vector3(0, rotationY * 90, 0));
+            room.transform.rotation = Quaternion.Euler(new Vector3(-90, rotationY * 90,0 ));
             
             dungeonRooms.Add(room);
+            UpdateWalls(room.transform);
         }
         
 
+    }
+    void setCorridors(Transform t)
+    {
+        
     }
     void updateDungeonRoomPositions()
     {
@@ -129,7 +138,7 @@ public class DungeonGenerationScript : MonoBehaviour
                         float overlapZone = r1M.bounds.extents.magnitude + r2M.bounds.extents.magnitude + roomDistance;
                         if (meshDistance < overlapZone)
                         {
-                            Debug.Log("intersection detected");
+                            
                             Vector3 deltaCenter = (r1.transform.position - r2.transform.position).normalized;
                             if (deltaCenter == Vector3.zero)
                             {
@@ -154,7 +163,52 @@ public class DungeonGenerationScript : MonoBehaviour
         
     }
     
+    void UpdateWalls(Transform t)
+    {
+        int walls = 0;
+        for (int i = 0; i< t.childCount; i++)
+        {
+            for (int j = 0; j< t.GetChild(i).transform.childCount; j++)
+            {
+                Debug.Log(t.GetChild(i).transform.GetChild(j).tag);
+                
+                if (t.GetChild(i).transform.GetChild(j).CompareTag("Wall"))
+                {
+                    Debug.Log(t.GetChild(i).transform.GetChild(j).tag);
+                    
+                    
+                    
+                    
+                }
 
+            }
+            int AmountOfwallsToDoorify = Random.Range(1, walls);
+            for (int j = 0; j < AmountOfwallsToDoorify; j++)
+            {
+                int walltoDoorify = Random.Range(0, t.Find("walls").transform.childCount);
+                if (t.Find("walls").transform.GetChild(walltoDoorify).gameObject)
+                {
+                    t.Find("walls").transform.GetChild(walltoDoorify).gameObject.SetActive(false);
+                    int corridorTiles = Random.Range(1, 6);
+                    for (int q = 0; q < corridorTiles; q++)
+                    {
+
+                        GameObject c = Instantiate(corridorTilePrefab);
+                        Vector3 pos = t.Find("walls").transform.GetChild(walltoDoorify).transform.position;
+                        
+                        pos += t.Find("walls").transform.GetChild(walltoDoorify).transform.forward * c.transform.GetComponent<Renderer>().bounds.extents.x * 2 * q;
+                        
+                        pos.y = t.Find("walls").transform.GetChild(walltoDoorify).transform.position.y;
+                        
+                        c.transform.position = pos;
+
+                    }
+                }
+                
+               
+            }
+        }
+    }
     Vector3 SnapToGrid( Vector3 position, float gridSize)
     {
         Vector3 snapPos = Vector3.zero;
