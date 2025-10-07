@@ -48,7 +48,6 @@ namespace NeuralNetwork_IHNMAIMS
             var completedCombo = tomeManager?.GetCompletedCombo(runes);
             if (completedCombo != null)
             {
-                Debug.Log($"Casting with unlocked combo: {completedCombo.comboName}! Applying bonus.");
                 speed *= completedCombo.bonusDamageMultiplier;
             }
 
@@ -65,26 +64,18 @@ namespace NeuralNetwork_IHNMAIMS
             var dominantRune = runes.Last();
 
             var main = ps.main;
-            main.startLifetime = AverageMinMaxCurve(runes.Select(r => r.startLifetime));
-            main.startSpeed = AverageMinMaxCurve(runes.Select(r => r.startSpeed));
-            main.startSize = AverageMinMaxCurve(runes.Select(r => r.startSize));
-            main.startRotation = AverageMinMaxCurve(runes.Select(r => r.startRotation));
+            main.loop = false;
+            main.stopAction = ParticleSystemStopAction.Destroy;
+            main.startLifetime = PreserveCurveOrAverage(runes, r => r.startLifetime, dominantRune);
+            main.startSpeed = PreserveCurveOrAverage(runes, r => r.startSpeed, dominantRune);
+            main.startSize = PreserveCurveOrAverage(runes, r => r.startSize, dominantRune);
+            main.startRotation = PreserveCurveOrAverage(runes, r => r.startRotation, dominantRune);
             main.gravityModifier = runes.Average(r => r.gravityModifier);
-            main.startColor = new ParticleSystem.MinMaxGradient(AverageColor(runes.Select(r => r.startColor)));
-            main.duration = 2.0f;
+            main.duration = runes.Max(r => r.systemDuration);
 
             var completedCombo = tomeManager?.GetCompletedCombo(runes);
-            if (completedCombo != null)
-            {
-                Debug.Log($"Casting with unlocked combo: {completedCombo.comboName}! Applying bonus.");
-                var emission = ps.emission;
-                emission.rateOverTime = runes.Average(r => r.emissionRate) * completedCombo.bonusDamageMultiplier;
-            }
-            else
-            {
-                var emission = ps.emission;
-                emission.rateOverTime = runes.Average(r => r.emissionRate);
-            }
+            var emission = ps.emission;
+            emission.rateOverTime = runes.Average(r => r.emissionRate) * (completedCombo != null ? completedCombo.bonusDamageMultiplier : 1f);
 
             if (runes.Any(r => r.bursts != null && r.bursts.Length > 0))
             {
@@ -99,7 +90,7 @@ namespace NeuralNetwork_IHNMAIMS
 
             var col = ps.colorOverLifetime;
             col.enabled = true;
-            col.color = AverageMinMaxGradient(runes.Select(r => r.colorOverLifetime));
+            col.color = CreateBlendedGradient(runes);
 
             var sol = ps.sizeOverLifetime;
             sol.enabled = true;
@@ -107,13 +98,13 @@ namespace NeuralNetwork_IHNMAIMS
 
             var rol = ps.rotationOverLifetime;
             rol.enabled = true;
-            rol.z = AverageMinMaxCurve(runes.Select(r => r.rotationOverLifetime));
+            rol.z = PreserveCurveOrAverage(runes, r => r.rotationOverLifetime, dominantRune);
 
             var vol = ps.velocityOverLifetime;
             vol.enabled = true;
-            vol.x = AverageMinMaxCurve(runes.Select(r => r.velocityX));
-            vol.y = AverageMinMaxCurve(runes.Select(r => r.velocityY));
-            vol.z = AverageMinMaxCurve(runes.Select(r => r.velocityZ));
+            vol.x = PreserveCurveOrAverage(runes, r => r.velocityX, dominantRune);
+            vol.y = PreserveCurveOrAverage(runes, r => r.velocityY, dominantRune);
+            vol.z = PreserveCurveOrAverage(runes, r => r.velocityZ, dominantRune);
 
             var noise = ps.noise;
             noise.enabled = runes.Any(r => r.noiseEnabled);
@@ -129,11 +120,21 @@ namespace NeuralNetwork_IHNMAIMS
             if (trails.enabled)
             {
                 var renderer = ps.GetComponent<ParticleSystemRenderer>();
-                renderer.trailMaterial = defaultTrailMaterial;
+                if (defaultTrailMaterial != null)
+                {
+                    renderer.trailMaterial = defaultTrailMaterial;
+                }
+                else
+                {
+                    var trailShader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+                    if (trailShader == null) trailShader = Shader.Find("Particles/Standard Unlit");
+                    if (trailShader == null) trailShader = Shader.Find("Legacy Shaders/Particles/Alpha Blended");
+                    renderer.trailMaterial = new Material(trailShader);
+                }
                 trails.mode = ParticleSystemTrailMode.PerParticle;
                 trails.lifetime = new ParticleSystem.MinMaxCurve(runes.Where(r => r.trailsEnabled).Average(r => r.trailLifetime));
                 trails.widthOverTrail = new ParticleSystem.MinMaxCurve(1f, runes.Where(r => r.trailsEnabled).Average(r => r.trailWidth));
-                trails.colorOverTrail = AverageMinMaxGradient(runes.Where(r => r.trailsEnabled).Select(r => r.trailColor));
+                trails.colorOverTrail = CreateBlendedGradient(runes.Where(r => r.trailsEnabled));
             }
 
             var collision = ps.collision;
@@ -142,8 +143,8 @@ namespace NeuralNetwork_IHNMAIMS
             {
                 collision.type = ParticleSystemCollisionType.World;
                 collision.mode = ParticleSystemCollisionMode.Collision3D;
-                collision.bounce = AverageMinMaxCurve(runes.Where(r => r.collisionEnabled).Select(r => r.bounce));
-                collision.lifetimeLoss = AverageMinMaxCurve(runes.Where(r => r.collisionEnabled).Select(r => r.lifetimeLoss));
+                collision.bounce = PreserveCurveOrAverage(runes.Where(r => r.collisionEnabled).Select(r => r.bounce), dominantRune.bounce);
+                collision.lifetimeLoss = PreserveCurveOrAverage(runes.Where(r => r.collisionEnabled).Select(r => r.lifetimeLoss), dominantRune.lifetimeLoss);
                 collision.dampen = runes.Where(r => r.collisionEnabled).Average(r => r.dampen);
                 collision.sendCollisionMessages = true;
             }
@@ -155,7 +156,7 @@ namespace NeuralNetwork_IHNMAIMS
                 texSheet.numTilesX = dominantRune.numTilesX;
                 texSheet.numTilesY = dominantRune.numTilesY;
                 texSheet.animation = dominantRune.animationType;
-                texSheet.frameOverTime = AverageMinMaxCurve(runes.Where(r => r.textureSheetEnabled).Select(r => r.frameOverTime));
+                texSheet.frameOverTime = PreserveCurveOrAverage(runes.Where(r => r.textureSheetEnabled).Select(r => r.frameOverTime), dominantRune.frameOverTime);
             }
 
             var lights = ps.lights;
@@ -201,8 +202,36 @@ namespace NeuralNetwork_IHNMAIMS
             main.playOnAwake = false;
 
             var renderer = ps.GetComponent<ParticleSystemRenderer>();
-            renderer.material = defaultParticleMaterial;
+            if (defaultParticleMaterial != null)
+            {
+                renderer.material = defaultParticleMaterial;
+                if (renderer.material.HasProperty("_Color")) renderer.material.color = Color.white;
+            }
+            else
+            {
+                var shader = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+                if (shader == null) shader = Shader.Find("Particles/Standard Unlit");
+                if (shader == null) shader = Shader.Find("Legacy Shaders/Particles/Alpha Blended");
+                renderer.material = new Material(shader);
+                if (renderer.material.HasProperty("_Color")) renderer.material.color = Color.white;
+            }
             return go;
+        }
+
+        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<RuneData> runes, System.Func<RuneData, ParticleSystem.MinMaxCurve> selector, RuneData dominantRune)
+        {
+            var list = runes.Select(selector).ToList();
+            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
+            if (anyCurve) return selector(dominantRune);
+            return AverageMinMaxCurve(list);
+        }
+
+        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<ParticleSystem.MinMaxCurve> curves, ParticleSystem.MinMaxCurve fallbackFromDominant)
+        {
+            var list = curves.ToList();
+            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
+            if (anyCurve) return fallbackFromDominant;
+            return AverageMinMaxCurve(list);
         }
 
         private ParticleSystem.MinMaxCurve AverageMinMaxCurve(IEnumerable<ParticleSystem.MinMaxCurve> curves)
@@ -210,37 +239,33 @@ namespace NeuralNetwork_IHNMAIMS
             if (!curves.Any()) return new ParticleSystem.MinMaxCurve(0);
             float avgConstantMin = curves.Average(c => c.constantMin);
             float avgConstantMax = curves.Average(c => c.constantMax);
-            return new ParticleSystem.MinMaxCurve(avgConstantMin, avgConstantMax) { mode = curves.First().mode };
+            return new ParticleSystem.MinMaxCurve(avgConstantMin, avgConstantMax);
         }
 
-        private Color AverageColor(IEnumerable<Color> colors)
+        private ParticleSystem.MinMaxGradient CreateBlendedGradient(IEnumerable<RuneData> runes)
         {
-            if (!colors.Any()) return Color.white;
-            float r = 0, g = 0, b = 0, a = 0;
-            foreach (var c in colors)
-            {
-                r += c.r;
-                g += c.g;
-                b += c.b;
-                a += c.a;
-            }
-            int count = colors.Count();
-            return new Color(r / count, g / count, b / count, a / count);
-        }
+            var runeList = runes.ToList();
+            if (!runeList.Any()) return new ParticleSystem.MinMaxGradient(Color.white);
 
-        private ParticleSystem.MinMaxGradient AverageMinMaxGradient(IEnumerable<ParticleSystem.MinMaxGradient> gradients)
-        {
-            if (!gradients.Any()) return new ParticleSystem.MinMaxGradient(Color.white);
-            Color avgColorMin = Color.black;
-            Color avgColorMax = Color.black;
-            foreach (var grad in gradients)
+            Color start = new Color(0, 0, 0, 0);
+            Color end = new Color(0, 0, 0, 0);
+
+            foreach (var rune in runeList)
             {
-                avgColorMin += grad.colorMin;
-                avgColorMax += grad.colorMax;
+                start += rune.startColor;
+                end += rune.colorOverLifetime.color;
             }
-            avgColorMin /= gradients.Count();
-            avgColorMax /= gradients.Count();
-            return new ParticleSystem.MinMaxGradient(avgColorMin, avgColorMax) { mode = gradients.First().mode };
+
+            start /= runeList.Count;
+            end /= runeList.Count;
+
+            var gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(start, 0.0f), new GradientColorKey(end, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(start.a, 0.0f), new GradientAlphaKey(end.a, 1.0f) }
+            );
+
+            return new ParticleSystem.MinMaxGradient(gradient);
         }
     }
 }

@@ -93,4 +93,7 @@ public class RuneData : ScriptableObject
     public float projectileLifetime = 10f;
     public bool projectileUseGravity = true;
     public float projectileArc = 0.2f;
+
+    [Header("System")]
+    public float systemDuration = 2f;
 }
