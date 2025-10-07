@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   runeType: 0
-  startColor: {r: 1, g: 1, b: 1, a: 1}
+  startColor: {r: 0.091313645, g: 0.3292974, b: 0.7169812, a: 0.7647059}
   startLifetime:
-    m_Mode: 3
+    m_Mode: 0
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -47,9 +47,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 5
+    m_ConstantMax: 20
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -63,7 +63,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 0
+    m_ConstantMin: 0.5
     m_ConstantMax: 1
   startRotation:
     m_Mode: 0
@@ -82,12 +82,13 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  gravityModifier: 0
+  gravityModifier: 5
   emissionRate: 50
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
-  randomizeDirection: 0
+  randomizeDirection: 1
+  randomizeDirectionAmount: 15
   colorOverLifetime:
     m_Mode: 0
     m_GradientMin:
@@ -248,9 +249,9 @@ MonoBehaviour:
   noiseStrength: 1
   noiseFrequency: 0.5
   noiseScrollSpeed: 1
-  trailsEnabled: 0
+  trailsEnabled: 1
   trailColor:
-    m_Mode: 0
+    m_Mode: 2
     m_GradientMin:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
@@ -311,10 +312,10 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
-  trailLifetime: 0.2
-  trailWidth: 0.1
+    m_ColorMin: {r: 0.12388753, g: 0.5089974, b: 0.9056604, a: 1}
+    m_ColorMax: {r: 0.20291919, g: 0.227813, b: 0.754717, a: 1}
+  trailLifetime: 1
+  trailWidth: 1.2
   collisionEnabled: 0
   bounce:
     m_Mode: 0
@@ -351,6 +352,8 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   dampen: 0.1
+  damage: 10
+  onHitEffects: []
   textureSheetEnabled: 0
   numTilesX: 1
   numTilesY: 1
@@ -372,7 +375,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  lightsEnabled: 0
+  lightsEnabled: 1
   lightPrefab: {fileID: 0}
   lightRatio: 0.1
   lightRange: 5
@@ -380,3 +383,9 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
+  isProjectile: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 20
+  projectileLifetime: 10
+  projectileUseGravity: 1
+  projectileArc: 0.2
