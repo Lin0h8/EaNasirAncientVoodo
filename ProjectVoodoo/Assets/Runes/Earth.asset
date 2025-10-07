@@ -152,7 +152,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0.37925395, g: 0.6226415, b: 0.22614807, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
+    m_ColorMax: {r: 0.6603774, g: 0.3647853, b: 0.18378428, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
