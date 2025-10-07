@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Earth
   m_EditorClassIdentifier: 
   runeType: 0
-  startColor: {r: 1, g: 1, b: 1, a: 1}
+  startColor: {r: 0.5849056, g: 0.34367603, b: 0.20692417, a: 1}
   startLifetime:
     m_Mode: 3
     m_CurveMultiplier: 0
@@ -88,8 +88,9 @@ MonoBehaviour:
   shapeRadius: 1
   shapeAngle: 25
   randomizeDirection: 0
+  randomizeDirectionAmount: 15
   colorOverLifetime:
-    m_Mode: 0
+    m_Mode: 2
     m_GradientMin:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
@@ -150,8 +151,8 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
+    m_ColorMin: {r: 0.37925395, g: 0.6226415, b: 0.22614807, a: 1}
+    m_ColorMax: {r: 0.6603774, g: 0.3647853, b: 0.18378428, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -159,17 +160,17 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 0
-      outSlope: -1
-      tangentMode: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -1
+      value: 1
+      inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -351,6 +352,8 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   dampen: 0.1
+  damage: 10
+  onHitEffects: []
   textureSheetEnabled: 0
   numTilesX: 1
   numTilesY: 1
@@ -380,3 +383,9 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
+  isProjectile: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 20
+  projectileLifetime: 10
+  projectileUseGravity: 1
+  projectileArc: 0.2
