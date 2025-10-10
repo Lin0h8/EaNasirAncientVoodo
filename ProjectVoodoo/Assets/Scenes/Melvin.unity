@@ -449,15 +449,15 @@ MonoBehaviour:
   tomeManager: {fileID: 11400000, guid: c0f3a6c3278b0224e90ef4f1c4f74264, type: 2}
   runeDatabase:
   - {fileID: 11400000, guid: d29e4e5cdbff8bb45b1e19b1a62c8e75, type: 2}
-  - {fileID: 11400000, guid: 4eb15edbad7e6f647b5ec513adeb8881, type: 2}
-  - {fileID: 11400000, guid: 445dee9a92d2f8d49909b649fda21a44, type: 2}
-  - {fileID: 11400000, guid: 5301afeeafea7f2499b3f514ace1c416, type: 2}
+  - {fileID: 11400000, guid: 6c7e7446c491c7d499ef02656e788574, type: 2}
   - {fileID: 11400000, guid: 5c526b29fa44ed64c882948c712a4e51, type: 2}
   - {fileID: 11400000, guid: 86b31dd704cb67348ac71cab411d5b23, type: 2}
   - {fileID: 11400000, guid: 9dd0fa5700e0f9242a7a757b651e2c6e, type: 2}
-  - {fileID: 11400000, guid: f66fa14cb67e8a44ea56fe940a2c29e9, type: 2}
+  - {fileID: 11400000, guid: 5301afeeafea7f2499b3f514ace1c416, type: 2}
+  - {fileID: 11400000, guid: 445dee9a92d2f8d49909b649fda21a44, type: 2}
   - {fileID: 11400000, guid: 9a66f604a302628459810f82057d27b8, type: 2}
-  - {fileID: 11400000, guid: 6c7e7446c491c7d499ef02656e788574, type: 2}
+  - {fileID: 11400000, guid: f66fa14cb67e8a44ea56fe940a2c29e9, type: 2}
+  - {fileID: 11400000, guid: 4eb15edbad7e6f647b5ec513adeb8881, type: 2}
 --- !u!1 &1070068148
 GameObject:
   m_ObjectHideFlags: 0

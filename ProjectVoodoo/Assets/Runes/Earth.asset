@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990d84c7a0407e84fa226b1ce6d3bef8, type: 3}
   m_Name: Earth
   m_EditorClassIdentifier: 
-  runeType: 0
+  runeType: 2
   startColor: {r: 0.5849056, g: 0.34367603, b: 0.20692417, a: 1}
   startLifetime:
     m_Mode: 3
@@ -84,7 +84,7 @@ MonoBehaviour:
     m_ConstantMax: 0
   gravityModifier: 0
   emissionRate: 50
-  shapeType: 0
+  shapeType: 5
   shapeRadius: 1
   shapeAngle: 25
   randomizeDirection: 0
@@ -151,8 +151,8 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_ColorMin: {r: 0.37925395, g: 0.6226415, b: 0.22614807, a: 1}
-    m_ColorMax: {r: 0.6603774, g: 0.3647853, b: 0.18378428, a: 1}
+    m_ColorMin: {r: 0.3245372, g: 0.35966027, b: 0.3679245, a: 1}
+    m_ColorMax: {r: 0.54588234, g: 0.745283, b: 0.17928976, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -389,3 +389,4 @@ MonoBehaviour:
   projectileLifetime: 10
   projectileUseGravity: 1
   projectileArc: 0.2
+  systemDuration: 2

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990d84c7a0407e84fa226b1ce6d3bef8, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  runeType: 0
+  runeType: 1
   startColor: {r: 0.091313645, g: 0.3292974, b: 0.7169812, a: 0.7647059}
   startLifetime:
     m_Mode: 0
@@ -389,3 +389,4 @@ MonoBehaviour:
   projectileLifetime: 10
   projectileUseGravity: 1
   projectileArc: 0.2
+  systemDuration: 2
