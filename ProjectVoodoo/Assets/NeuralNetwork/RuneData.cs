@@ -1,5 +1,6 @@
 using NeuralNetwork_IHNMAIMS;
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "New Rune Data", menuName = "Rune System/Rune Data")]
 public class RuneData : ScriptableObject
@@ -7,9 +8,15 @@ public class RuneData : ScriptableObject
     [Header("General")]
     public NeuralNetwork_IHNMAIMS.RuneType runeType;
 
+    [Header("Material Override")]
+    public Material overrideMaterial;
+
+    public bool useRandomFromMaterialList = false;
+
+    public List<Material> overrideMaterials = new List<Material>();
+
     [Header("Main Module")]
     public Color startColor = Color.white;
-
     public ParticleSystem.MinMaxCurve startLifetime = new ParticleSystem.MinMaxCurve(1f, 2f);
     public ParticleSystem.MinMaxCurve startSpeed = new ParticleSystem.MinMaxCurve(5f);
     public ParticleSystem.MinMaxCurve startSize = new ParticleSystem.MinMaxCurve(1f);
