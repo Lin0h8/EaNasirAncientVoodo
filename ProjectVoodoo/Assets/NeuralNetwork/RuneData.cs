@@ -12,7 +12,6 @@ public class RuneData : ScriptableObject
     public Material overrideMaterial;
 
     public bool useRandomFromMaterialList = false;
-
     public List<Material> overrideMaterials = new List<Material>();
 
     [Header("Main Module")]
