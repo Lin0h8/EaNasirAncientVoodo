@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Air
   m_EditorClassIdentifier: 
   runeType: 0
+  overrideMaterial: {fileID: 0}
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 0}
   startColor: {r: 0.6956658, g: 0.73786247, b: 0.764151, a: 1}
   startLifetime:
     m_Mode: 3
