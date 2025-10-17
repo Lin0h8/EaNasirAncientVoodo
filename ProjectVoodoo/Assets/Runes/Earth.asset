@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Earth
   m_EditorClassIdentifier: 
   runeType: 2
+  overrideMaterial: {fileID: 0}
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 2100000, guid: 17ca5d28837a1ee4e96c5fb2e88755e9, type: 2}
+  - {fileID: 2100000, guid: 9db815c7e1780c24dae643d9c5d9cac3, type: 2}
   startColor: {r: 0.5849056, g: 0.34367603, b: 0.20692417, a: 1}
   startLifetime:
     m_Mode: 3
@@ -47,9 +52,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 5
+    m_ConstantMax: 15
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -63,10 +68,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 0
-    m_ConstantMax: 1
+    m_ConstantMin: 1
+    m_ConstantMax: 2
   startRotation:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -81,16 +86,16 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0
-  gravityModifier: 0
+    m_ConstantMax: 10
+  gravityModifier: 1.5
   emissionRate: 50
   shapeType: 5
   shapeRadius: 1
   shapeAngle: 25
-  randomizeDirection: 0
+  randomizeDirection: 1
   randomizeDirectionAmount: 15
   colorOverLifetime:
-    m_Mode: 2
+    m_Mode: 0
     m_GradientMin:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
@@ -151,8 +156,8 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    m_ColorMin: {r: 0.3245372, g: 0.35966027, b: 0.3679245, a: 1}
-    m_ColorMax: {r: 0.54588234, g: 0.745283, b: 0.17928976, a: 1}
+    m_ColorMin: {r: 0.36862746, g: 0.35707757, b: 0.3254902, a: 1}
+    m_ColorMax: {r: 0.49056602, g: 0.3525252, b: 0.242969, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -246,7 +251,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   noiseEnabled: 0
-  noiseStrength: 1
+  noiseStrength: 4
   noiseFrequency: 0.5
   noiseScrollSpeed: 1
   trailsEnabled: 0
@@ -316,7 +321,7 @@ MonoBehaviour:
     m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
   trailLifetime: 0.2
   trailWidth: 0.1
-  collisionEnabled: 0
+  collisionEnabled: 1
   bounce:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -389,4 +394,4 @@ MonoBehaviour:
   projectileLifetime: 10
   projectileUseGravity: 1
   projectileArc: 0.2
-  systemDuration: 2
+  systemDuration: 5
