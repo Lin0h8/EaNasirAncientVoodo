@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990d84c7a0407e84fa226b1ce6d3bef8, type: 3}
   m_Name: Metal
   m_EditorClassIdentifier: 
-  runeType: 0
+  runeType: 8
+  overrideMaterial: {fileID: 0}
+  useRandomFromMaterialList: 0
+  overrideMaterials: []
   startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
@@ -88,6 +91,7 @@ MonoBehaviour:
   shapeRadius: 1
   shapeAngle: 25
   randomizeDirection: 0
+  randomizeDirectionAmount: 15
   colorOverLifetime:
     m_Mode: 0
     m_GradientMin:
@@ -351,6 +355,8 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   dampen: 0.1
+  damage: 10
+  onHitEffects: []
   textureSheetEnabled: 0
   numTilesX: 1
   numTilesY: 1
@@ -380,3 +386,10 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
+  isProjectile: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 20
+  projectileLifetime: 10
+  projectileUseGravity: 1
+  projectileArc: 0.2
+  systemDuration: 2
