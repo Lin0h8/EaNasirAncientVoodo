@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runeType: 8
   overrideMaterial: {fileID: 0}
-  useRandomFromMaterialList: 0
-  overrideMaterials: []
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 2100000, guid: 2674948c6939c2f4ba8e3e0db4d1ec0b, type: 2}
+  - {fileID: 2100000, guid: 49bcf34fe57c0d042891b48facb9a3ed, type: 2}
   startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
@@ -67,9 +69,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 1
+    m_ConstantMax: 8
   startRotation:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -84,9 +86,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0
+    m_ConstantMax: 15
   gravityModifier: 0
-  emissionRate: 50
+  emissionRate: 150
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
@@ -252,7 +254,7 @@ MonoBehaviour:
   noiseStrength: 1
   noiseFrequency: 0.5
   noiseScrollSpeed: 1
-  trailsEnabled: 0
+  trailsEnabled: 1
   trailColor:
     m_Mode: 0
     m_GradientMin:
@@ -316,10 +318,10 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
-  trailLifetime: 0.2
+    m_ColorMax: {r: 1, g: 1, b: 1, a: 0.078431375}
+  trailLifetime: 0.1
   trailWidth: 0.1
-  collisionEnabled: 0
+  collisionEnabled: 1
   bounce:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -378,7 +380,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  lightsEnabled: 0
+  lightsEnabled: 1
   lightPrefab: {fileID: 0}
   lightRatio: 0.1
   lightRange: 5
@@ -392,4 +394,4 @@ MonoBehaviour:
   projectileLifetime: 10
   projectileUseGravity: 1
   projectileArc: 0.2
-  systemDuration: 2
+  systemDuration: 3
