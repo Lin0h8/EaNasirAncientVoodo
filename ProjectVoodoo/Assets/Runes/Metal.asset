@@ -52,7 +52,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 5
+    m_ConstantMax: 10
   startSize:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 8
+    m_ConstantMax: 1.5
   startRotation:
     m_Mode: 3
     m_CurveMultiplier: 0
@@ -87,8 +87,8 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 15
-  gravityModifier: 0
-  emissionRate: 150
+  gravityModifier: 4
+  emissionRate: 100
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
@@ -157,7 +157,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
+    m_ColorMax: {r: 0.867613, g: 0.89592916, b: 0.9150943, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -165,17 +165,17 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 0
-      outSlope: -1
-      tangentMode: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -1
+      value: 1
+      inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -183,22 +183,58 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationOverLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_CurveMax:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -2
+        outSlope: -2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 0
-    m_ConstantMax: 0
+    m_ConstantMin: 5
+    m_ConstantMax: 10
   velocityX:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -254,7 +290,7 @@ MonoBehaviour:
   noiseStrength: 1
   noiseFrequency: 0.5
   noiseScrollSpeed: 1
-  trailsEnabled: 1
+  trailsEnabled: 0
   trailColor:
     m_Mode: 0
     m_GradientMin:
@@ -338,7 +374,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0.5
+    m_ConstantMax: 1
   lifetimeLoss:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -388,7 +424,7 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
-  isProjectile: 0
+  isProjectile: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 20
   projectileLifetime: 10

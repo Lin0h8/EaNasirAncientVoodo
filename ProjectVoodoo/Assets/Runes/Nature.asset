@@ -19,7 +19,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 7eba89beffcb5e5448b78bb08f00c9eb, type: 2}
   - {fileID: 2100000, guid: 60fd3dcdf27dc024986188eba032f640, type: 2}
   - {fileID: 2100000, guid: 64f076795b548a24f908dd95e88f75c0, type: 2}
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
   startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
@@ -54,7 +53,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 10
+    m_ConstantMax: 3
   startSize:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -71,7 +70,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 3
+    m_ConstantMax: 1
   startRotation:
     m_Mode: 3
     m_CurveMultiplier: 0
@@ -90,7 +89,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 10
   gravityModifier: 0.5
-  emissionRate: 100
+  emissionRate: 150
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
@@ -185,7 +184,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationOverLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -199,8 +198,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 0
-    m_ConstantMax: 0
+    m_ConstantMin: 5
+    m_ConstantMax: 15
   velocityX:
     m_Mode: 0
     m_CurveMultiplier: 0

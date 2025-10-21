@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runeType: 9
   overrideMaterial: {fileID: 0}
-  useRandomFromMaterialList: 0
-  overrideMaterials: []
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 2100000, guid: b3ae2da6a91375a40af07a6dbb4cfcd4, type: 2}
+  - {fileID: 2100000, guid: e6d438df5f351a54db9f5361b800e7e7, type: 2}
+  - {fileID: 2100000, guid: f428fcf6aaefe264a8923c42d9bc3048, type: 2}
   startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
@@ -67,9 +70,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 1
+    m_ConstantMax: 2
   startRotation:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -84,7 +87,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0
+    m_ConstantMax: 10
   gravityModifier: 0
   emissionRate: 50
   shapeType: 0
@@ -386,7 +389,7 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
-  isProjectile: 0
+  isProjectile: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 20
   projectileLifetime: 10

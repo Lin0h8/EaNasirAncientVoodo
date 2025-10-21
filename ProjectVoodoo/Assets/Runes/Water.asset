@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   runeType: 1
+  overrideMaterial: {fileID: 0}
+  useRandomFromMaterialList: 0
+  overrideMaterials: []
   startColor: {r: 0.091313645, g: 0.3292974, b: 0.7169812, a: 0.7647059}
   startLifetime:
     m_Mode: 0
@@ -383,7 +386,7 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
-  isProjectile: 0
+  isProjectile: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 20
   projectileLifetime: 10

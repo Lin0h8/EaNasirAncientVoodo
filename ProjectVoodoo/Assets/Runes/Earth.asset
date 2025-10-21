@@ -16,9 +16,11 @@ MonoBehaviour:
   overrideMaterial: {fileID: 0}
   useRandomFromMaterialList: 1
   overrideMaterials:
+  - {fileID: 2100000, guid: 3662def59150ac44488680fe1261f30c, type: 2}
+  - {fileID: 2100000, guid: 4adfae2dabcf95746a907ba7687d56c6, type: 2}
+  - {fileID: 2100000, guid: 832472e0e34dc6a409d9fbf237b6ecb2, type: 2}
   - {fileID: 2100000, guid: 17ca5d28837a1ee4e96c5fb2e88755e9, type: 2}
-  - {fileID: 2100000, guid: 9db815c7e1780c24dae643d9c5d9cac3, type: 2}
-  startColor: {r: 0.5849056, g: 0.34367603, b: 0.20692417, a: 1}
+  startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
     m_CurveMultiplier: 0
@@ -157,7 +159,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0.36862746, g: 0.35707757, b: 0.3254902, a: 1}
-    m_ColorMax: {r: 0.49056602, g: 0.3525252, b: 0.242969, a: 1}
+    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -388,7 +390,7 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
-  isProjectile: 0
+  isProjectile: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 20
   projectileLifetime: 10
