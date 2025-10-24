@@ -87,7 +87,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 15
-  gravityModifier: 4
+  gravityModifier: 3
   emissionRate: 100
   shapeType: 0
   shapeRadius: 1
