@@ -23,6 +23,10 @@ public class Room : MonoBehaviour
         public RoomTypes roomType;
     public int x;
     public int y;
+    public int DoorX;
+    public int DoorY;
+    public int NewDoorX;
+    public int NewDoorY;
         public Transform[] o;
         [SerializeField] public List<GameObject> TileObjects = new List<GameObject>();
         
