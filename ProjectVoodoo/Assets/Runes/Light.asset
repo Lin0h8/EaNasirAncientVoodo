@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runeType: 4
   overrideMaterial: {fileID: 2100000, guid: 9ec5ec54cef2bfc429bb9976e81079cc, type: 2}
-  useRandomFromMaterialList: 0
-  overrideMaterials: []
-  startColor: {r: 1, g: 0.99528104, b: 0.8254717, a: 1}
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 2100000, guid: 63abb7041a8a0c94986c1a76810a3e8c, type: 2}
+  - {fileID: 2100000, guid: 9ec5ec54cef2bfc429bb9976e81079cc, type: 2}
+  startColor: {r: 1, g: 0.99895483, b: 0.9103774, a: 1}
   startLifetime:
     m_Mode: 3
     m_CurveMultiplier: 0
@@ -67,9 +69,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 1
+    m_ConstantMax: 3
   startRotation:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -84,13 +86,13 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0
-  gravityModifier: 0
-  emissionRate: 50
+    m_ConstantMax: 0.5
+  gravityModifier: -0.1
+  emissionRate: 60
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
-  randomizeDirection: 0
+  randomizeDirection: 1
   randomizeDirectionAmount: 15
   colorOverLifetime:
     m_Mode: 0
@@ -155,7 +157,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0.2784314}
+    m_ColorMax: {r: 1, g: 0.9046659, b: 0.4481132, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -181,7 +183,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationOverLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -196,7 +198,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 0
+    m_ConstantMax: 1
   velocityX:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -248,10 +250,10 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  noiseEnabled: 0
-  noiseStrength: 1
+  noiseEnabled: 1
+  noiseStrength: 0.5
   noiseFrequency: 0.5
-  noiseScrollSpeed: 1
+  noiseScrollSpeed: 0.5
   trailsEnabled: 0
   trailColor:
     m_Mode: 0
@@ -378,15 +380,15 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  lightsEnabled: 0
+  lightsEnabled: 1
   lightPrefab: {fileID: 0}
   lightRatio: 0.1
-  lightRange: 5
-  lightIntensity: 1
+  lightRange: 10
+  lightIntensity: 10
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
-  isProjectile: 0
+  isProjectile: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 20
   projectileLifetime: 10

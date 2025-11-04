@@ -454,7 +454,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &380693340
 RectTransform:
@@ -823,7 +823,7 @@ MonoBehaviour:
   ceilingMaterial: {fileID: 2100000, guid: 32893d67d8436924785c967aca219dee, type: 2}
   addLights: 1
   shadowType: 0
-  lightIntensity: 1.4
+  lightIntensity: 3
   lightRange: 8
   lightSpacing: 8
   lightColor: {r: 1, g: 0.79926246, b: 0.3160377, a: 1}
@@ -1549,9 +1549,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maze: {fileID: 940341223}
   height: 1
-  moveSpeed: 6
+  moveSpeed: 3
   rotateSpeed: 2.5
-  lookAheadDistance: 2
+  lookAheadDistance: 6
   loop: 1
 --- !u!114 &1820402638
 MonoBehaviour:
@@ -2296,7 +2296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.90588236}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.3882353}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2327,6 +2327,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1820402636}
   - {fileID: 940341222}
-  - {fileID: 380693340}
   - {fileID: 1947579396}
+  - {fileID: 380693340}
   - {fileID: 285906448}

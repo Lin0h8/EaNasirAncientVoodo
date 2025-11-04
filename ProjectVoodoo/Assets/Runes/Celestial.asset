@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: Celestial
   m_EditorClassIdentifier: 
   runeType: 0
+  overrideMaterial: {fileID: 0}
+  useRandomFromMaterialList: 1
+  overrideMaterials:
+  - {fileID: 2100000, guid: 9f2915c1424ae6f4998c5057bb8b95f5, type: 2}
+  - {fileID: 2100000, guid: f52799ec1c800544f8bb0b5f4eca165e, type: 2}
+  - {fileID: 2100000, guid: 63abb7041a8a0c94986c1a76810a3e8c, type: 2}
+  - {fileID: 2100000, guid: 3722b71abcbe8f34599fdb5f774d1627, type: 2}
+  - {fileID: 2100000, guid: 9ec5ec54cef2bfc429bb9976e81079cc, type: 2}
   startColor: {r: 1, g: 1, b: 1, a: 1}
   startLifetime:
     m_Mode: 3
@@ -47,9 +55,9 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     m_ConstantMin: 0
-    m_ConstantMax: 5
+    m_ConstantMax: 2
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -63,8 +71,8 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ConstantMin: 0
-    m_ConstantMax: 1
+    m_ConstantMin: 1
+    m_ConstantMax: 4
   startRotation:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -82,12 +90,13 @@ MonoBehaviour:
       m_RotationOrder: 4
     m_ConstantMin: 0
     m_ConstantMax: 0
-  gravityModifier: 0
+  gravityModifier: -0.2
   emissionRate: 50
   shapeType: 0
   shapeRadius: 1
   shapeAngle: 25
   randomizeDirection: 0
+  randomizeDirectionAmount: 15
   colorOverLifetime:
     m_Mode: 0
     m_GradientMin:
@@ -151,7 +160,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     m_ColorMin: {r: 0, g: 0, b: 0, a: 1}
-    m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
+    m_ColorMax: {r: 0.97714806, g: 0, b: 1, a: 1}
   sizeOverLifetime:
     serializedVersion: 2
     m_Curve:
@@ -351,6 +360,8 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   dampen: 0.1
+  damage: 10
+  onHitEffects: []
   textureSheetEnabled: 0
   numTilesX: 1
   numTilesY: 1
@@ -380,3 +391,10 @@ MonoBehaviour:
   subEmittersEnabled: 0
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
+  isProjectile: 1
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 20
+  projectileLifetime: 10
+  projectileUseGravity: 1
+  projectileArc: 0.2
+  systemDuration: 2
