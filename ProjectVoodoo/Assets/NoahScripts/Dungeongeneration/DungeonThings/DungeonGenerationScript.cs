@@ -6,20 +6,35 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using Unity.Mathematics;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
+using System.Collections;
 
 
 
 //using static UnityEditor.PlayerSettings;
 public class DungeonGenerationScript : MonoBehaviour
 {
+    private bool dungeonGenerated = false;
+
+    public Loadingscreenscript loadingscreen;
     void Start()
     {
+        
+        loadingscreen.Show();
         CreateDungeon();
+        StartCoroutine(DrawDungeon());
+       
+    }
+    IEnumerator DrawDungeon()
+    {
+        
         for (int i = 0; i < dungeonRooms.Count; i++)
         {
-            DrawRoom(dungeonRooms[i], dungeonRooms[i].x, dungeonRooms[i].y);
+            DrawRoom(i, dungeonRooms[i].x, dungeonRooms[i].y);
         }
         List<Doors> availableDoors = new List<Doors>();
+        int iterationCounter = 0;
         for (int o = 0; o < roomObjects.Count; o++)
         {
             for (int p = 0; p < roomObjects.Count; p++)
@@ -38,46 +53,56 @@ public class DungeonGenerationScript : MonoBehaviour
                             GameObject g2 = go2[j];
                             for (int d = 0; d < g1.transform.childCount; d++)
                             {
-                                Transform door1 = g1.transform.GetChild(d).Find("Door").transform;
-                                Transform door2;
-                                switch (g1.transform.GetChild(d).name)
+                                if (g1.transform.GetChild(d) != g1.transform.Find("Roof") && g1.transform.GetChild(d) != g1.transform.Find("Breaker"))
                                 {
-                                    case "NorthernWall":
-                                        door2 = g2.transform.Find("SouthernWall").Find("Door").transform;
-                                        break;
-                                    case "SouthernWall":
-                                        door2 = g2.transform.Find("NorthernWall").Find("Door").transform;
-                                        break;
-                                    case "EasternWall":
-                                        door2 = g2.transform.Find("WesternWall").Find("Door").transform;
-                                        break;
-                                    case "WesternWall":
-                                        door2 = g2.transform.Find("EasternWall").Find("Door").transform;
-                                        break;
-                                    default:
-                                        door2 = g2.transform;
-                                        break;
 
-                                }
-                                
 
-                                //if (door1.position.x  +1+ door1.GetComponent<Renderer>().bounds.extents.x > door2.position.x &&
-                                //    door2.position.x + door2.GetComponent<Renderer>().bounds.extents.x > door1.position.x &&
-                                //    door1.position.y +1 + door1.GetComponent<Renderer>().bounds.extents.y > door2.position.y &&
-                                //    door2.position.y + door2.GetComponent<Renderer>().bounds.extents.y > door1.position.y)
-                                Bounds b1 = door1.GetComponent<Renderer>().bounds;
-                                Bounds b2 = door2.GetComponent<Renderer>().bounds;
-                                b1.Expand(0.01f);
-                                
-                                if (b1.Intersects(b2))
-                                {
-                                    Doors aDoor = new Doors();
-                                    aDoor.g1 = door1.gameObject;
-                                    aDoor.g2 = door2.gameObject;
-                                    availableDoors.Add(aDoor);
+                                    Transform door1 = g1.transform.GetChild(d).Find("Door").transform;
+                                    Transform door2;
+                                    switch (g1.transform.GetChild(d).name)
+                                    {
+                                        case "NorthernWall":
+                                            door2 = g2.transform.Find("SouthernWall").Find("Door").transform;
+                                            break;
+                                        case "SouthernWall":
+                                            door2 = g2.transform.Find("NorthernWall").Find("Door").transform;
+                                            break;
+                                        case "EasternWall":
+                                            door2 = g2.transform.Find("WesternWall").Find("Door").transform;
+                                            break;
+                                        case "WesternWall":
+                                            door2 = g2.transform.Find("EasternWall").Find("Door").transform;
+                                            break;
+                                        default:
+                                            door2 = g2.transform;
+                                            break;
+
+                                    }
+
+
+                                    //if (door1.position.x  +1+ door1.GetComponent<Renderer>().bounds.extents.x > door2.position.x &&
+                                    //    door2.position.x + door2.GetComponent<Renderer>().bounds.extents.x > door1.position.x &&
+                                    //    door1.position.y +1 + door1.GetComponent<Renderer>().bounds.extents.y > door2.position.y &&
+                                    //    door2.position.y + door2.GetComponent<Renderer>().bounds.extents.y > door1.position.y)
+                                    Bounds b1 = door1.GetComponent<Renderer>().bounds;
+                                    Bounds b2 = door2.GetComponent<Renderer>().bounds;
+                                    b1.Expand(0.01f);
+
+                                    if (b1.Intersects(b2))
+                                    {
+                                        Doors aDoor = new Doors();
+                                        aDoor.g1 = door1.gameObject;
+                                        aDoor.g2 = door2.gameObject;
+                                        availableDoors.Add(aDoor);
+                                    }
                                 }
+                                iterationCounter++;
+                                if (iterationCounter % 1000 == 0)
+                                    yield return null;
                             }
+                            
                         }
+                        
                     }
                     if (availableDoors.Count > 0)
                     {
@@ -85,13 +110,36 @@ public class DungeonGenerationScript : MonoBehaviour
                         doorsToRemove.g1.SetActive(false);
                         doorsToRemove.g2.SetActive(false);
                     }
-                    
-                }
-            }
-           
 
+                }
+                if ((p % 5) == 0)
+                {
+                    yield return null;
+                }
+                    
+            }
+
+            float progress = (float)o / roomObjects.Count;
+            loadingscreen.UpdateProgress(progress);
+            yield return null;
 
         }
+
+
+
+        yield return null; 
+
+        
+        GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        
+        loadingscreen.UpdateProgress(1f);
+        yield return null;
+
+
+        loadingscreen.Hide();
+        dungeonGenerated = true;
+        Debug.Log("Dungeon generated successfully");
     }
     struct Doors
     {
@@ -110,6 +158,7 @@ public class DungeonGenerationScript : MonoBehaviour
     public GameObject floorPrefab;
     public GameObject[] roomPrefab;
     public GameObject wallPrefab;
+    public GameObject[] Enemies;
     public GameObject corridorTilePrefab;
     public GameObject[,] DungeonRoomMap;
     public float GridSize;
@@ -125,6 +174,8 @@ public class DungeonGenerationScript : MonoBehaviour
     #endregion
     void CreateDungeon()
     {
+        width *= (7);
+        height *= (7);
         DungeonMap = new Room[width, height];
 
         for (int i = 0; i < DungeonMap.GetLength(0); i++)
@@ -221,10 +272,15 @@ public class DungeonGenerationScript : MonoBehaviour
                     int mapX = i + posX;
                     int mapY = j + posY;
 
+                    int shouldBeEnemySpawn = UnityEngine.Random.Range(0, 11);
+                    DungeonMap[mapX, mapY].isActive = 1;
+                    if (shouldBeEnemySpawn == 6 || shouldBeEnemySpawn == 7)
+                    {
+                        room.ShouldSpawnEnemy = true;
+                    }
                     
                     
-                    
-                        DungeonMap[mapX, mapY].isActive = 1;
+                        
                     
                         
 
@@ -234,10 +290,12 @@ public class DungeonGenerationScript : MonoBehaviour
             room.y = posY;
 
             dungeonRooms.Add(room);
+
         }
     }
-    void DrawRoom(Room room, int posX, int posY)
+    void DrawRoom(int q, int posX, int posY)
     {
+        Room room = dungeonRooms[q];
         List<GameObject> roomCollection = new List<GameObject>();
             for (int i = 0; i < room.roomTiles.GetLength(0); i++)
             {
@@ -246,7 +304,7 @@ public class DungeonGenerationScript : MonoBehaviour
                     int mapX = i + posX;
                     int mapY = j + posY;
                     GameObject floor = Instantiate(roomPrefab[0]);
-
+                    
                     floor.GetComponent<Room>().enabled = false;
                     Renderer[] renderers = floor.transform.GetComponentsInChildren<Renderer>();
                     float width = 0;
@@ -261,6 +319,7 @@ public class DungeonGenerationScript : MonoBehaviour
                     depth += combinedBounds.size.z;
 
                     floor.transform.position = new Vector3(mapX * width, 0, mapY * depth);
+                
                     for (int Y = -1; Y <= 1; Y++)
                     {
                         Vector2 curPos = new Vector2(i, j);
@@ -322,11 +381,28 @@ public class DungeonGenerationScript : MonoBehaviour
                     
                 }
                     roomCollection.Add(floor);
-                
-                
+                    floor.transform.SetParent(transform);
+                    
                 }
 
             }
+            if (room.ShouldSpawnEnemy)
+        {
+            Debug.Log("EnemyShouldSpanw");
+            int r = UnityEngine.Random.Range(0, Enemies.Length);
+            int s = UnityEngine.Random.Range(0, roomCollection.Count);
+            GameObject g = Instantiate(Enemies[r]);
+            g.transform.SetParent(null);
+            
+            Vector3 center = roomCollection[s].transform.GetComponent<Renderer>().bounds.center;
+            g.transform.position =  new Vector3(center.x, roomCollection[s].transform.position.y + g.transform.GetComponent<Renderer>().bounds.extents.y, center.z);
+
+        }
+            if(q == dungeonRooms.Count - 1)
+        {
+            int r = UnityEngine.Random.Range(0, roomCollection.Count);
+            roomCollection[r].transform.Find("Breaker").gameObject.SetActive(true);
+        }
         roomObjects.Add(roomCollection);
 
        

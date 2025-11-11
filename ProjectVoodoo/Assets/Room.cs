@@ -14,8 +14,8 @@ public class Room : MonoBehaviour
         smallRoom,
         BigRoom
     }
-    
-    
+
+    public bool ShouldSpawnEnemy = false;
         public int isActive = 0;
         public int[,] roomTiles;
 
