@@ -3,6 +3,11 @@ using System.Linq;
 
 namespace NeuralNetwork_IHNMAIMS
 {
+    public interface IDamageable
+    {
+        void TakeDamage(float amount);
+    }
+
     [CreateAssetMenu(fileName = "New Damage Effect", menuName = "Rune System/Spell Effects/Damage")]
     public class DamageEffect : SpellEffect
     {
@@ -15,7 +20,6 @@ namespace NeuralNetwork_IHNMAIMS
             {
                 float totalDamage = sourceRunes.Where(r => r.collisionEnabled).Average(r => r.damage);
 
-                // Check for unlocked rune combos for a damage bonus
                 var tomeManager = FindFirstObjectByType<TomeManager>();
                 if (tomeManager != null)
                 {
@@ -27,7 +31,6 @@ namespace NeuralNetwork_IHNMAIMS
                     }
                 }
 
-                // Check for enemy resistances and weaknesses
                 if (target.TryGetComponent<EnemyResistances>(out var resistances))
                 {
                     foreach (var rune in sourceRunes)
@@ -53,10 +56,5 @@ namespace NeuralNetwork_IHNMAIMS
                 Debug.LogWarning($"Target {target.name} does not have an IDamageable component.");
             }
         }
-    }
-
-    public interface IDamageable
-    {
-        void TakeDamage(float amount);
     }
 }
