@@ -24,7 +24,16 @@ public class DungeonGenerationScript : MonoBehaviour
         loadingscreen.Show();
         CreateDungeon();
         StartCoroutine(DrawDungeon());
-       
+        
+        
+            
+            
+                
+                
+            
+            
+            
+        
     }
     IEnumerator DrawDungeon()
     {
@@ -140,6 +149,19 @@ public class DungeonGenerationScript : MonoBehaviour
         loadingscreen.Hide();
         dungeonGenerated = true;
         Debug.Log("Dungeon generated successfully");
+        for (int j = 1; j< roomObjects.Count-1; j--)
+        {
+            for (int i = 0; i < roomObjects[roomObjects.Count - j].Count; i++)
+            {
+                if (roomObjects[roomObjects.Count - j][i].transform.Find("EasternWall").gameObject.activeInHierarchy && roomObjects[roomObjects.Count - j][i].transform.Find("EasternWall").transform.Find("Door").gameObject.activeInHierarchy)
+                {
+                    roomObjects[roomObjects.Count - j][i].transform.Find("Breaker").gameObject.SetActive(true);
+                    j = roomObjects.Count;
+                    break;
+                }
+            }
+        }
+        
     }
     struct Doors
     {
@@ -398,11 +420,7 @@ public class DungeonGenerationScript : MonoBehaviour
             g.transform.position =  new Vector3(center.x, roomCollection[s].transform.position.y + g.transform.GetComponent<Renderer>().bounds.extents.y, center.z);
 
         }
-            if(q == dungeonRooms.Count - 1)
-        {
-            int r = UnityEngine.Random.Range(0, roomCollection.Count);
-            roomCollection[r].transform.Find("Breaker").gameObject.SetActive(true);
-        }
+        
         roomObjects.Add(roomCollection);
 
        
