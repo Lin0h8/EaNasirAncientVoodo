@@ -10,6 +10,7 @@ namespace NeuralNetwork_IHNMAIMS
         public Material defaultTrailMaterial;
         public TomeManager tomeManager;
 
+        // Asså jag ber om ursäkt för ts.
         public void GenerateSpell(RuneData[] runes, Vector3 position)
         {
             if (runes == null || runes.Length == 0) return;
@@ -457,6 +458,22 @@ namespace NeuralNetwork_IHNMAIMS
             return go;
         }
 
+        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<RuneData> runes, System.Func<RuneData, ParticleSystem.MinMaxCurve> selector, RuneData dominantRune)
+        {
+            var list = runes.Select(selector).ToList();
+            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
+            if (anyCurve) return selector(dominantRune);
+            return AverageMinMaxCurve(list);
+        }
+
+        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<ParticleSystem.MinMaxCurve> curves, ParticleSystem.MinMaxCurve fallbackFromDominant)
+        {
+            var list = curves.ToList();
+            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
+            if (anyCurve) return fallbackFromDominant;
+            return AverageMinMaxCurve(list);
+        }
+
         private Material ResolveFallbackMaterial(Material candidate)
         {
             if (candidate != null) return candidate;
@@ -509,22 +526,6 @@ namespace NeuralNetwork_IHNMAIMS
                 scaled[i] = nb;
             }
             return scaled;
-        }
-
-        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<RuneData> runes, System.Func<RuneData, ParticleSystem.MinMaxCurve> selector, RuneData dominantRune)
-        {
-            var list = runes.Select(selector).ToList();
-            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
-            if (anyCurve) return selector(dominantRune);
-            return AverageMinMaxCurve(list);
-        }
-
-        private ParticleSystem.MinMaxCurve PreserveCurveOrAverage(IEnumerable<ParticleSystem.MinMaxCurve> curves, ParticleSystem.MinMaxCurve fallbackFromDominant)
-        {
-            var list = curves.ToList();
-            bool anyCurve = list.Any(c => c.mode == ParticleSystemCurveMode.Curve || c.mode == ParticleSystemCurveMode.TwoCurves);
-            if (anyCurve) return fallbackFromDominant;
-            return AverageMinMaxCurve(list);
         }
     }
 }

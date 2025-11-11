@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc3ffcc5c9609da4ea5810d72d40ddc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingscreen: {fileID: 0}
   width: 50
   height: 50
   roomCount: 10
@@ -570,6 +571,7 @@ MonoBehaviour:
   floorPrefab: {fileID: 0}
   roomPrefab: []
   wallPrefab: {fileID: 0}
+  Enemies: []
   corridorTilePrefab: {fileID: 0}
   GridSize: 0
   roomDistance: 0
