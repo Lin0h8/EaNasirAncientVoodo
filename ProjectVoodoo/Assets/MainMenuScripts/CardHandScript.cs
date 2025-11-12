@@ -1,6 +1,7 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CardHandScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -18,26 +19,64 @@ public class CardHandScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] private AnimationCurve hoverEasing = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     private Vector3 _originalScale;
-    private int _originalSortingOrder;
-    private Canvas _cardCanvas;
     private Coroutine _scaleRoutine;
+    private Graphic _cardGraphic;
+    private int _originalSiblingIndex;
+    private GraphicRaycaster _raycaster;
 
     private void Awake()
     {
         _originalScale = transform.localScale;
+        _originalSiblingIndex = transform.GetSiblingIndex();
 
-        _cardCanvas = GetComponent<Canvas>();
-        if (_cardCanvas == null)
+        _cardGraphic = GetComponent<RawImage>();
+        if (_cardGraphic == null)
         {
-            _cardCanvas = gameObject.AddComponent<Canvas>();
-            _cardCanvas.overrideSorting = true;
+            _cardGraphic = GetComponent<Image>();
         }
 
-        _originalSortingOrder = _cardCanvas.sortingOrder;
+        if (_cardGraphic == null)
+        {
+            _cardGraphic = gameObject.AddComponent<Image>();
+            ((Image)_cardGraphic).color = new Color(1, 1, 1, 0.01f);
+        }
+
+        _cardGraphic.raycastTarget = true;
+
+        Canvas cardCanvas = GetComponent<Canvas>();
+        if (cardCanvas != null)
+        {
+            DestroyImmediate(cardCanvas);
+        }
 
         if (parentCanvas == null)
         {
             parentCanvas = GetComponentInParent<Canvas>();
+        }
+
+        if (parentCanvas != null)
+        {
+            _raycaster = parentCanvas.GetComponent<GraphicRaycaster>();
+            if (_raycaster == null)
+            {
+                _raycaster = parentCanvas.gameObject.AddComponent<GraphicRaycaster>();
+            }
+        }
+
+        if (EventSystem.current == null)
+        {
+            GameObject eventSystemObj = new GameObject("EventSystem");
+            eventSystemObj.AddComponent<EventSystem>();
+            eventSystemObj.AddComponent<StandaloneInputModule>();
+        }
+
+        var tmpComponents = GetComponentsInChildren<TextMeshProUGUI>();
+        foreach (var tmp in tmpComponents)
+        {
+            if (tmp.raycastTarget)
+            {
+                tmp.raycastTarget = false;
+            }
         }
     }
 
@@ -48,8 +87,7 @@ public class CardHandScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             infoText.text = $"<b>{developerName}</b>\n{developerDescription}";
         }
 
-        _cardCanvas.sortingOrder = 100;
-
+        transform.SetAsLastSibling();
         StartScaleTransition(_originalScale, _originalScale * hoverScale);
     }
 
@@ -60,8 +98,7 @@ public class CardHandScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             infoText.text = "";
         }
 
-        _cardCanvas.sortingOrder = _originalSortingOrder;
-
+        transform.SetSiblingIndex(_originalSiblingIndex);
         StartScaleTransition(transform.localScale, _originalScale);
     }
 
@@ -96,9 +133,10 @@ public class CardHandScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void OnValidate()
     {
-        if (_cardCanvas == null)
+        Canvas cardCanvas = GetComponent<Canvas>();
+        if (cardCanvas != null)
         {
-            _cardCanvas = GetComponent<Canvas>();
+            DestroyImmediate(cardCanvas);
         }
     }
 }
