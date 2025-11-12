@@ -8,7 +8,7 @@ public class EnemyAIFSM : MonoBehaviour
     public Transform playerTarget;
     public Transform patrolCenter;
     public Renderer enemyRenderer;
-
+    public  Transform Dungeongen;
     // === Detection Settings ===
     [Header("Detection Settings")]
     public float detectRange = 10f;
@@ -36,6 +36,10 @@ public class EnemyAIFSM : MonoBehaviour
         // Auto-assign components and initial values
         if (agent == null) agent = GetComponent<NavMeshAgent>();
         if (patrolCenter == null) patrolCenter = transform;
+        if (Dungeongen == null) Dungeongen = GameObject.FindWithTag("DungeonGenerator")?.transform;
+
+
+
 
         // Set initial state and color
         currentState = EnemyState.IdlePatrol;
@@ -45,39 +49,44 @@ public class EnemyAIFSM : MonoBehaviour
 
     void Update()
     {
-        // 1. Always check for player presence
-        bool playerDetected = CheckForPlayer();
-
-        // 2. State Transition Logic (FSM)
-        switch (currentState)
+        if (Dungeongen.GetComponent<DungeonGenerationScript>().isDone)
         {
-            case EnemyState.IdlePatrol:
-                if (playerDetected)
-                {
-                    // Transition: Patrol -> Follow
-                    ChangeState(EnemyState.FollowPlayer);
-                }
-                else
-                {
-                    // Stay in Patrol State
-                    PatrolUpdate();
-                }
-                break;
 
-            case EnemyState.FollowPlayer:
-                if (!playerDetected)
-                {
-                    // Transition: Follow -> Patrol
-                    ChangeState(EnemyState.IdlePatrol);
-                    // Force immediate patrol movement
-                    SetNewPatrolPoint();
-                }
-                else
-                {
-                    // Stay in Follow State
-                    FollowUpdate();
-                }
-                break;
+
+            // 1. Always check for player presence
+            bool playerDetected = CheckForPlayer();
+
+            // 2. State Transition Logic (FSM)
+            switch (currentState)
+            {
+                case EnemyState.IdlePatrol:
+                    if (playerDetected)
+                    {
+                        // Transition: Patrol -> Follow
+                        ChangeState(EnemyState.FollowPlayer);
+                    }
+                    else
+                    {
+                        // Stay in Patrol State
+                        PatrolUpdate();
+                    }
+                    break;
+
+                case EnemyState.FollowPlayer:
+                    if (!playerDetected)
+                    {
+                        // Transition: Follow -> Patrol
+                        ChangeState(EnemyState.IdlePatrol);
+                        // Force immediate patrol movement
+                        SetNewPatrolPoint();
+                    }
+                    else
+                    {
+                        // Stay in Follow State
+                        FollowUpdate();
+                    }
+                    break;
+            }
         }
     }
 

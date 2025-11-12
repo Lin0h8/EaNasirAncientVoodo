@@ -15,7 +15,7 @@ using System.Collections;
 //using static UnityEditor.PlayerSettings;
 public class DungeonGenerationScript : MonoBehaviour
 {
-    private bool dungeonGenerated = false;
+   
 
     public Loadingscreenscript loadingscreen;
     void Start()
@@ -23,17 +23,16 @@ public class DungeonGenerationScript : MonoBehaviour
         
         loadingscreen.Show();
         CreateDungeon();
-        StartCoroutine(DrawDungeon());
+        StartCoroutine(DrawDungeon()); 
         
-        
-            
-            
-                
-                
-            
-            
-            
-        
+
+
+
+
+
+
+
+
     }
     IEnumerator DrawDungeon()
     {
@@ -118,6 +117,8 @@ public class DungeonGenerationScript : MonoBehaviour
                         Doors doorsToRemove = availableDoors[UnityEngine.Random.Range(0, availableDoors.Count)];
                         doorsToRemove.g1.SetActive(false);
                         doorsToRemove.g2.SetActive(false);
+                        doorsToRemove.g1.GetComponent<MeshCollider>().gameObject.SetActive(false);
+                        doorsToRemove.g2.GetComponent<MeshCollider>().gameObject.SetActive(false);
                     }
 
                 }
@@ -147,9 +148,13 @@ public class DungeonGenerationScript : MonoBehaviour
 
 
         loadingscreen.Hide();
-        dungeonGenerated = true;
+        
+        Player.transform.position = new Vector3(roomObjects[0][roomObjects[0].Count / 2].transform.GetComponent<Renderer>().bounds.center.x,
+        roomObjects[0][roomObjects[0].Count / 2].transform.position.y + Player.transform.GetComponent<Renderer>().bounds.extents.y,
+        roomObjects[0][roomObjects[0].Count / 2].transform.GetComponent<Renderer>().bounds.center.z);
+        isDone = true;
         Debug.Log("Dungeon generated successfully");
-        for (int j = 1; j< roomObjects.Count-1; j--)
+        for (int j = 1; j< roomObjects.Count; j++)
         {
             for (int i = 0; i < roomObjects[roomObjects.Count - j].Count; i++)
             {
@@ -181,6 +186,7 @@ public class DungeonGenerationScript : MonoBehaviour
     public GameObject[] roomPrefab;
     public GameObject wallPrefab;
     public GameObject[] Enemies;
+    public GameObject Player;
     public GameObject corridorTilePrefab;
     public GameObject[,] DungeonRoomMap;
     public float GridSize;
@@ -191,7 +197,7 @@ public class DungeonGenerationScript : MonoBehaviour
     Vector3 DoorPosition = Vector3.zero;
     Vector3 DoorDirection = Vector3.zero;
     public List<List<GameObject>> roomObjects = new List<List<GameObject>>();
-
+    public bool isDone = false;
    
     #endregion
     void CreateDungeon()
