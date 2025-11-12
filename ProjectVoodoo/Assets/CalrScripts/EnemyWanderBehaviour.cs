@@ -5,41 +5,44 @@ public class EnemyAIFSM : MonoBehaviour
 {
     // === Component References ===
     public NavMeshAgent agent;
+
     public Transform playerTarget;
     public Transform patrolCenter;
     public Renderer enemyRenderer;
-    public  Transform Dungeongen;
+    public Transform Dungeongen;
+
     // === Detection Settings ===
     [Header("Detection Settings")]
     public float detectRange = 10f;
+
     public LayerMask playerLayer; // Layer of the Player object
     public LayerMask obstacleLayer; // Layers that block the raycast (e.g., walls)
 
     // === Patrol Settings ===
     [Header("Patrol Settings")]
     public float patrolRadius = 15f;
+
     public float patrolDelay = 3f;
 
     // === State Management ===
-    private enum EnemyState { IdlePatrol, FollowPlayer }
+    private enum EnemyState
+    { IdlePatrol, FollowPlayer }
+
     private EnemyState currentState = EnemyState.IdlePatrol;
     private float patrolTimer = 0f;
 
     // === Visuals (Optional for Debugging) ===
     [Header("Visuals")]
     public Color patrolColor = Color.green;
+
     public Color followColor = Color.red;
 
-
-    void Start()
+    private void Start()
     {
         // Auto-assign components and initial values
         if (agent == null) agent = GetComponent<NavMeshAgent>();
         if (patrolCenter == null) patrolCenter = transform;
         if (Dungeongen == null) Dungeongen = GameObject.FindWithTag("DungeonGenerator")?.transform;
-
-
-
 
         // Set initial state and color
         currentState = EnemyState.IdlePatrol;
@@ -47,12 +50,10 @@ public class EnemyAIFSM : MonoBehaviour
         if (enemyRenderer != null) enemyRenderer.material.color = patrolColor;
     }
 
-    void Update()
+    private void Update()
     {
         if (Dungeongen.GetComponent<DungeonGenerationScript>().isDone)
         {
-
-
             // 1. Always check for player presence
             bool playerDetected = CheckForPlayer();
 

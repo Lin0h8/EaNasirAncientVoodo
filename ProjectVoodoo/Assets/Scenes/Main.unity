@@ -1394,7 +1394,7 @@ GameObject:
   - component: {fileID: 690011557}
   - component: {fileID: 690011559}
   - component: {fileID: 690011558}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2064,6 +2064,7 @@ MonoBehaviour:
   loop: 1
   playOnAwake: 1
   startPaused: 0
+  pauseWhenNoInput: 1
 --- !u!43 &1100649829
 Mesh:
   m_ObjectHideFlags: 0
@@ -2581,7 +2582,7 @@ GameObject:
   - component: {fileID: 1371326480}
   - component: {fileID: 1371326483}
   - component: {fileID: 1371326484}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -4409,9 +4410,25 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 437376524516975078, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3174351372515828586, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
+      propertyPath: damagePerCollision
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 3174351372515828586, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
+      propertyPath: healthBarFillImage
+      value: 
+      objectReference: {fileID: 1896880798}
     - target: {fileID: 3844902388815673022, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3844902388815673022, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3928762012798133353, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
       propertyPath: speed
@@ -4432,7 +4449,7 @@ PrefabInstance:
       addedObject: {fileID: 690011557}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3844902388815673022, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
-      insertIndex: -1
+      insertIndex: 6
       addedObject: {fileID: 1398356532}
   m_SourcePrefab: {fileID: 100100000, guid: a767390055ea5c44c937997d49b0a3fa, type: 3}
 --- !u!1660057539 &9223372036854775807

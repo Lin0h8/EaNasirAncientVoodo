@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6656338328341025505}
   - component: {fileID: 3928762012798133353}
   - component: {fileID: 8025091265037945964}
+  - component: {fileID: 3174351372515828586}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -192,3 +193,22 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3174351372515828586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3844902388815673022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ffb2424de3dde46b7e2b8e6798c9fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  damagePerCollision: 10
+  invincibilityDuration: 1
+  healthBarFillImage: {fileID: 0}
+  gameOverSceneName: GameOver
+  enableDebugLogs: 1

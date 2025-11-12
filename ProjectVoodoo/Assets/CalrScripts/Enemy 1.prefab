@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 7406883887538650636}
   m_Layer: 3
   m_Name: Enemy 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.55
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -151,7 +151,7 @@ MonoBehaviour:
   detectRange: 10
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -333,3 +333,4 @@ MonoBehaviour:
   loop: 1
   playOnAwake: 1
   startPaused: 0
+  pauseWhenNoInput: 0
