@@ -18,7 +18,7 @@ MonoBehaviour:
   overrideMaterials: []
   startColor: {r: 0.091313645, g: 0.3292974, b: 0.7169812, a: 0.7647059}
   startLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -69,7 +69,7 @@ MonoBehaviour:
     m_ConstantMin: 0.5
     m_ConstantMax: 1
   startRotation:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -181,7 +181,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationOverLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -319,7 +319,7 @@ MonoBehaviour:
     m_ColorMax: {r: 0.20291919, g: 0.227813, b: 0.754717, a: 1}
   trailLifetime: 1
   trailWidth: 1.2
-  collisionEnabled: 0
+  collisionEnabled: 1
   bounce:
     m_Mode: 0
     m_CurveMultiplier: 0

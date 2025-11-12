@@ -378,10 +378,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5ef949547ff9a4584b5f34fbd8a0c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenTransition: {fileID: 0}
-  mazeGenerator: {fileID: 0}
-  delayBeforeRegenerate: 0.5
-  delayBeforeFadeIn: 0.3
 --- !u!1 &400264143
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,6 +784,7 @@ MonoBehaviour:
   spellBookCanvasGroup: {fileID: 0}
   suggestionResultText: {fileID: 0}
   tomeManager: {fileID: 11400000, guid: c0f3a6c3278b0224e90ef4f1c4f74264, type: 2}
+  cameraControlScript: {fileID: 0}
 --- !u!1 &1568692870
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,8 +907,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  deathEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
+  deathEffect: {fileID: 1568692870}
+  hitEffect: {fileID: 1568692870}
 --- !u!1 &1807778666
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ namespace NeuralNetwork_IHNMAIMS
         public Material defaultTrailMaterial;
         public TomeManager tomeManager;
 
-        // Ass� jag ber om urs�kt f�r ts.
         public void GenerateSpell(RuneData[] runes, Vector3 position)
         {
             if (runes == null || runes.Length == 0) return;
@@ -169,9 +168,6 @@ namespace NeuralNetwork_IHNMAIMS
                     collision.sendCollisionMessages = true;
                 }
 
-                // Instrumentation: log collision settings for this PS
-                Debug.Log($"[RuneMagicController] Created PS '{go.name}' at {position}. collision.enabled={ps.collision.enabled}, sendCollisionMessages={ps.collision.sendCollisionMessages}, type={ps.collision.type}, collidesWith={ps.collision.collidesWith.value}");
-
                 var texSheet = ps.textureSheetAnimation;
                 texSheet.enabled = texSheetEnabled;
                 if (texSheet.enabled)
@@ -212,9 +208,6 @@ namespace NeuralNetwork_IHNMAIMS
                 go.AddComponent<DestroyAfterParticles>();
                 go.SetActive(true);
                 ps.Play();
-
-                // Instrumentation: confirm PS started
-                Debug.Log($"[RuneMagicController] Play() called on '{go.name}'. ps.isPlaying={ps.isPlaying}");
             }
             else
             {
@@ -317,9 +310,6 @@ namespace NeuralNetwork_IHNMAIMS
                         collision.sendCollisionMessages = true;
                     }
 
-                    // Instrumentation: log collision settings for child PS
-                    Debug.Log($"[RuneMagicController] Created child PS '{child.name}' at {position}. collision.enabled={ps.collision.enabled}, sendCollisionMessages={ps.collision.sendCollisionMessages}, type={ps.collision.type}, collidesWith={ps.collision.collidesWith.value}");
-
                     var texSheet = ps.textureSheetAnimation;
                     texSheet.enabled = texSheetEnabled;
                     if (texSheet.enabled)
@@ -359,9 +349,6 @@ namespace NeuralNetwork_IHNMAIMS
 
                     child.AddComponent<DestroyAfterParticles>();
                     ps.Play();
-
-                    // Instrumentation: confirm PS started
-                    Debug.Log($"[RuneMagicController] Play() called on child '{child.name}'. ps.isPlaying={ps.isPlaying}");
                 }
             }
         }

@@ -35,7 +35,7 @@ MonoBehaviour:
     m_ConstantMin: 1
     m_ConstantMax: 2
   startSpeed:
-    m_Mode: 3
+    m_Mode: 0
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -52,7 +52,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 5
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -199,7 +199,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   rotationOverLifetime:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -337,7 +337,7 @@ MonoBehaviour:
     m_ColorMax: {r: 1, g: 0.5126302, b: 0, a: 1}
   trailLifetime: 0.2
   trailWidth: 0.5
-  collisionEnabled: 0
+  collisionEnabled: 1
   bounce:
     m_Mode: 0
     m_CurveMultiplier: 0

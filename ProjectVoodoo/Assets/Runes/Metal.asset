@@ -54,7 +54,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 10
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2

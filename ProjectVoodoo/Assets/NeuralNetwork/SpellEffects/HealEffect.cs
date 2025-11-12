@@ -13,7 +13,6 @@ namespace NeuralNetwork_IHNMAIMS
             var healable = target.GetComponent<IHealable>();
             if (healable != null)
             {
-                Debug.Log($"Applying {baseHealAmount} healing to {target.name}");
                 healable.Heal(baseHealAmount);
             }
         }

@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private float xRotation = 0f;
 
-    void Start()
+    private void Start()
     {
         controller = GetComponent<CharacterController>();
         if (cameraTransform == null)
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
         // Camera controls
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
