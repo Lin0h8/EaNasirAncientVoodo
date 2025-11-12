@@ -32,6 +32,10 @@ public class DrawingController : MonoBehaviour
     public CanvasGroup spellBookCanvasGroup;
     public Text suggestionResultText;
     public TomeManager tomeManager;
+
+    [Header("Camera Control")]
+    public MonoBehaviour cameraControlScript;
+
     private List<GameObject> _allStrokes = new List<GameObject>();
     private Canvas _canvas;
     private List<Vector2> _currentStrokePoints = new List<Vector2>();
@@ -85,6 +89,12 @@ public class DrawingController : MonoBehaviour
                 spellBookCanvas.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
+                if (cameraControlScript != null)
+                {
+                    cameraControlScript.enabled = true;
+                }
+
                 _isAnimatingClose = false;
                 yield break;
             }
@@ -133,6 +143,11 @@ public class DrawingController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        if (cameraControlScript != null)
+        {
+            cameraControlScript.enabled = true;
+        }
+
         _isAnimatingClose = false;
     }
 
@@ -153,6 +168,12 @@ public class DrawingController : MonoBehaviour
                 spellBookCanvas.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
+                if (cameraControlScript != null)
+                {
+                    cameraControlScript.enabled = true;
+                }
+
                 _isAnimatingClose = false;
                 yield break;
             }
@@ -202,6 +223,11 @@ public class DrawingController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (cameraControlScript != null)
+        {
+            cameraControlScript.enabled = true;
+        }
 
         _isAnimatingClose = false;
     }
@@ -441,7 +467,6 @@ public class DrawingController : MonoBehaviour
 
         if (drawingArea == null || runeMagicController == null)
         {
-            Debug.LogError("Drawing Area and Rune Magic Controller must be assigned in the inspector.");
             enabled = false;
         }
 
@@ -495,6 +520,11 @@ public class DrawingController : MonoBehaviour
                 _isDrawingMode = true;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+
+                if (cameraControlScript != null)
+                {
+                    cameraControlScript.enabled = false;
+                }
 
                 if (spellBookCanvas != null)
                 {

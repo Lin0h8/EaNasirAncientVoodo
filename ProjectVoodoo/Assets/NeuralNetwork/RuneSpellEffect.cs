@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 namespace NeuralNetwork_IHNMAIMS
 {
@@ -15,12 +15,17 @@ namespace NeuralNetwork_IHNMAIMS
 
         private void OnParticleCollision(GameObject other)
         {
-            if (Runes == null || !Runes.Any()) return;
+            if (Runes == null || !Runes.Any())
+            {
+                return;
+            }
 
             var allEffects = Runes
                 .Where(r => r.collisionEnabled && r.onHitEffects != null)
                 .SelectMany(r => r.onHitEffects)
-                .Distinct();
+                .Where(e => e != null)
+                .Distinct()
+                .ToList();
 
             foreach (var effect in allEffects)
             {

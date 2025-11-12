@@ -24,19 +24,20 @@ namespace NeuralNetwork_IHNMAIMS
 
             EnsurePhysics();
 
-            // Apply gravity setting after ensuring physics
             _rb.useGravity = useGravity;
             _rb.linearVelocity = initialVelocity;
 
+            IgnorePlayerCollision();
+
             _initialized = true;
 
-            // Start destruction timer
             Destroy(gameObject, lifeTime);
         }
 
         private void Awake()
         {
             EnsurePhysics();
+            IgnorePlayerCollision();
         }
 
         private void EnsurePhysics()
@@ -46,7 +47,7 @@ namespace NeuralNetwork_IHNMAIMS
                 _rb = GetComponent<Rigidbody>();
                 if (_rb == null) _rb = gameObject.AddComponent<Rigidbody>();
                 _rb.interpolation = RigidbodyInterpolation.Interpolate;
-                _rb.collisionDetectionMode = CollisionDetectionMode.Continuous; // Better collision detection
+                _rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
                 _rb.useGravity = useGravity;
             }
 
@@ -54,7 +55,42 @@ namespace NeuralNetwork_IHNMAIMS
             {
                 var col = gameObject.AddComponent<SphereCollider>();
                 col.isTrigger = false;
-                ((SphereCollider)col).radius = 0.3f; // Increased from 0.1f for better collision detection
+                ((SphereCollider)col).radius = 0.3f;
+            }
+        }
+
+        private void IgnorePlayerCollision()
+        {
+            Collider myCol = GetComponent<Collider>();
+            if (myCol == null) return;
+
+            GameObject playerGo = null;
+            try
+            {
+                playerGo = GameObject.FindWithTag("Player");
+            }
+            catch { playerGo = null; }
+
+            if (playerGo != null)
+            {
+                var playerCols = playerGo.GetComponentsInChildren<Collider>();
+                foreach (var pc in playerCols)
+                {
+                    if (pc != null)
+                        Physics.IgnoreCollision(myCol, pc, true);
+                }
+                return;
+            }
+
+            var playerController = FindObjectOfType<PlayerController>();
+            if (playerController != null)
+            {
+                var controllerCols = playerController.GetComponentsInChildren<Collider>();
+                foreach (var pc in controllerCols)
+                {
+                    if (pc != null)
+                        Physics.IgnoreCollision(myCol, pc, true);
+                }
             }
         }
 
@@ -69,8 +105,6 @@ namespace NeuralNetwork_IHNMAIMS
                 hitPoint = collision.GetContact(0).point;
             }
 
-            Debug.Log($"RuneProjectile hit: {collision.gameObject.name} at {hitPoint}");
-
             if (Controller != null && Runes != null && Runes.Length > 0)
             {
                 Controller.GenerateSpell(Runes, hitPoint);
@@ -81,10 +115,8 @@ namespace NeuralNetwork_IHNMAIMS
 
         private void Start()
         {
-            // Only destroy if not initialized (fallback)
             if (!_initialized)
             {
-                Debug.LogWarning($"RuneProjectile on {gameObject.name} was not initialized via Init(). Destroying.");
                 Destroy(gameObject, 1f);
             }
         }

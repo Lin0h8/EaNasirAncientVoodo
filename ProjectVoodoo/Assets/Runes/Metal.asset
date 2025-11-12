@@ -54,7 +54,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 10
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -426,7 +426,7 @@ MonoBehaviour:
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
   isProjectile: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8448738330675822032, guid: fb9a40310c9a9b943bd831df0dfee61b, type: 3}
   projectileSpeed: 20
   projectileLifetime: 10
   projectileUseGravity: 1

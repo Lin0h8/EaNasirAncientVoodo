@@ -54,7 +54,6 @@ namespace NeuralNetwork_IHNMAIMS
             return suggestions.Distinct().ToList();
         }
 
-        //LINQ är fire för det här, leggit
         public void UnlockRandomTome()
         {
             var lockedCombos = allCombos.Where(c => !c.isUnlocked).ToList();
@@ -62,7 +61,6 @@ namespace NeuralNetwork_IHNMAIMS
             {
                 var comboToUnlock = lockedCombos[Random.Range(0, lockedCombos.Count)];
                 comboToUnlock.isUnlocked = true;
-                Debug.Log($"Unlocked Tome: {comboToUnlock.comboName}");
             }
         }
 

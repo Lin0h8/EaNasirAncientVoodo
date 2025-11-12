@@ -18,7 +18,6 @@ namespace NeuralNetwork_IHNMAIMS
             var statusReceiver = target.GetComponent<IStatusReceiver>();
             if (statusReceiver != null)
             {
-                Debug.Log($"Applying {statusType} to {target.name} for {duration}s with magnitude {magnitude}");
                 statusReceiver.ApplyStatus(statusType, duration, magnitude);
             }
         }

@@ -54,7 +54,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 5
   startSize:
-    m_Mode: 0
+    m_Mode: 3
     m_CurveMultiplier: 0
     m_CurveMin:
       serializedVersion: 2
@@ -321,7 +321,7 @@ MonoBehaviour:
     m_ColorMax: {r: 1, g: 1, b: 1, a: 1}
   trailLifetime: 0.2
   trailWidth: 0.1
-  collisionEnabled: 0
+  collisionEnabled: 1
   bounce:
     m_Mode: 0
     m_CurveMultiplier: 0
@@ -390,7 +390,7 @@ MonoBehaviour:
   subEmitterPrefab: {fileID: 0}
   subEmitterType: 0
   isProjectile: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8448738330675822032, guid: fb9a40310c9a9b943bd831df0dfee61b, type: 3}
   projectileSpeed: 20
   projectileLifetime: 10
   projectileUseGravity: 1

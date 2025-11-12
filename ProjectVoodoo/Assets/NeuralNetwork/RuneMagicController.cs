@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace NeuralNetwork_IHNMAIMS
 {
@@ -10,7 +10,6 @@ namespace NeuralNetwork_IHNMAIMS
         public Material defaultTrailMaterial;
         public TomeManager tomeManager;
 
-        // Asså jag ber om ursäkt för ts.
         public void GenerateSpell(RuneData[] runes, Vector3 position)
         {
             if (runes == null || runes.Length == 0) return;
