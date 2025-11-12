@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using NeuralNetwork_IHNMAIMS;
@@ -10,7 +11,7 @@ public class DrawingController : MonoBehaviour
     public RectTransform drawingArea;
     public Color lineColor = Color.black;
     public Material lineMaterial;
-    public float lineThickness = 1.5f;
+    public float lineThickness = 5f;
     public string networkModelPath = "trained_network.json";
     public Text recognitionResultText;
     public List<RuneData> runeDatabase;
@@ -20,13 +21,31 @@ public class DrawingController : MonoBehaviour
 
     public Text suggestionResultText;
     public TomeManager tomeManager;
+
+    [Header("Spell Book UI")]
+    public GameObject spellBookCanvas;
+
+    public RectTransform bookContentRect;
+    public CanvasGroup spellBookCanvasGroup;
+
+    [Header("Canvas Animation")]
+    public float pullUpDistance = 50f;
+
+    public float pullUpDuration = 0.15f;
+    public float pullDownDuration = 0.3f;
+
     private Canvas _canvas;
-    private LineRenderer _currentLineRenderer;
+    private List<Vector2> _currentStrokePoints = new List<Vector2>();
+    private List<GameObject> _currentStrokeSegments = new List<GameObject>();
     private bool _isDrawingMode = false;
     private Camera _mainCamera;
     private NetworkProcessor _networkProcessor;
     private List<RuneData> _runeSequence = new List<RuneData>();
-    private List<GameObject> _strokes = new List<GameObject>();
+    private List<GameObject> _allStrokes = new List<GameObject>();
+    private RuneData[] _readySpell = null;
+    private bool _spellReady = false;
+    private Vector2 _lastDrawnPoint;
+    private bool _isAnimatingClose = false;
 
     public static Material GetMaterialForRune(RuneData runeData, Material defaultMaterial)
     {
@@ -51,22 +70,20 @@ public class DrawingController : MonoBehaviour
     private float[] CaptureAndProcessDrawing()
     {
         var pixels = new float[28 * 28];
-        if (_currentLineRenderer.positionCount < 2) return pixels;
-
-        var points = new Vector3[_currentLineRenderer.positionCount];
-        _currentLineRenderer.GetPositions(points);
+        if (_currentStrokePoints.Count < 2) return pixels;
 
         float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
         Vector2 massCenter = Vector2.zero;
-        foreach (var p in points)
+
+        foreach (var p in _currentStrokePoints)
         {
             minX = Mathf.Min(minX, p.x);
             maxX = Mathf.Max(maxX, p.x);
             minY = Mathf.Min(minY, p.y);
             maxY = Mathf.Max(maxY, p.y);
-            massCenter += new Vector2(p.x, p.y);
+            massCenter += p;
         }
-        massCenter /= points.Length;
+        massCenter /= _currentStrokePoints.Count;
 
         float drawingWidth = maxX - minX;
         float drawingHeight = maxY - minY;
@@ -75,10 +92,12 @@ public class DrawingController : MonoBehaviour
 
         Vector2 offset = new Vector2(14, 14) - new Vector2((massCenter.x - minX) * scale, (massCenter.y - minY) * scale);
 
-        for (int i = 0; i < points.Length - 1; i++)
+        for (int i = 0; i < _currentStrokePoints.Count - 1; i++)
         {
-            Vector2 start = new Vector2((points[i].x - minX) * scale + offset.x, (points[i].y - minY) * scale + offset.y);
-            Vector2 end = new Vector2((points[i + 1].x - minX) * scale + offset.x, (points[i + 1].y - minY) * scale + offset.y);
+            Vector2 start = new Vector2((_currentStrokePoints[i].x - minX) * scale + offset.x,
+                                       (_currentStrokePoints[i].y - minY) * scale + offset.y);
+            Vector2 end = new Vector2((_currentStrokePoints[i + 1].x - minX) * scale + offset.x,
+                                     (_currentStrokePoints[i + 1].y - minY) * scale + offset.y);
             DrawLineOnArray(pixels, start, end, 28, 28, lineThickness);
         }
 
@@ -87,12 +106,13 @@ public class DrawingController : MonoBehaviour
 
     private void ClearDrawing()
     {
-        foreach (var stroke in _strokes)
+        foreach (var stroke in _allStrokes)
         {
             Destroy(stroke);
         }
-        _strokes.Clear();
-        _currentLineRenderer = null;
+        _allStrokes.Clear();
+        _currentStrokeSegments.Clear();
+        _currentStrokePoints.Clear();
     }
 
     private void Draw()
@@ -104,51 +124,43 @@ public class DrawingController : MonoBehaviour
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(drawingArea, Input.mousePosition, cam, out Vector2 localPoint);
 
-        if (_currentLineRenderer == null)
+        if (_currentStrokePoints.Count == 0 || Vector2.Distance(_lastDrawnPoint, localPoint) > 2f)
         {
-            GameObject lineGO = new GameObject("DrawingStroke");
-            lineGO.transform.SetParent(drawingArea, false);
-            _strokes.Add(lineGO);
+            _currentStrokePoints.Add(localPoint);
+            _lastDrawnPoint = localPoint;
 
-            _currentLineRenderer = lineGO.AddComponent<LineRenderer>();
-            var mat = lineMaterial;
-            if (mat == null)
+            if (_currentStrokePoints.Count >= 2)
             {
-                var fallbackShader = Shader.Find("Sprites/Default");
-                if (fallbackShader == null)
-                {
-                    fallbackShader = Shader.Find("Universal Render Pipeline/Unlit");
-                }
-                mat = new Material(fallbackShader);
+                Vector2 startPoint = _currentStrokePoints[_currentStrokePoints.Count - 2];
+                Vector2 endPoint = _currentStrokePoints[_currentStrokePoints.Count - 1];
+                CreateLineSegment(startPoint, endPoint);
             }
-            _currentLineRenderer.material = mat;
-            _currentLineRenderer.startColor = lineColor;
-            _currentLineRenderer.endColor = lineColor;
-            _currentLineRenderer.startWidth = 5f;
-            _currentLineRenderer.endWidth = 5f;
-            _currentLineRenderer.positionCount = 0;
-            _currentLineRenderer.useWorldSpace = false;
-            _currentLineRenderer.alignment = LineAlignment.View;
-
-            if (_canvas != null)
-            {
-                _currentLineRenderer.sortingLayerID = _canvas.sortingLayerID;
-                _currentLineRenderer.sortingOrder = _canvas.sortingOrder + 100;
-            }
-            else
-            {
-                _currentLineRenderer.sortingLayerName = "UI";
-                _currentLineRenderer.sortingOrder = short.MaxValue;
-            }
-
-            _currentLineRenderer.material.renderQueue = 4000;
         }
+    }
 
-        if (_currentLineRenderer.positionCount == 0 || Vector2.Distance(_currentLineRenderer.GetPosition(_currentLineRenderer.positionCount - 1), localPoint) > 1f)
-        {
-            _currentLineRenderer.positionCount++;
-            _currentLineRenderer.SetPosition(_currentLineRenderer.positionCount - 1, new Vector3(localPoint.x, localPoint.y, 0f));
-        }
+    private void CreateLineSegment(Vector2 start, Vector2 end)
+    {
+        GameObject lineObj = new GameObject("LineSegment");
+        lineObj.transform.SetParent(drawingArea, false);
+
+        Image lineImage = lineObj.AddComponent<Image>();
+        lineImage.color = lineColor;
+        lineImage.raycastTarget = false;
+
+        RectTransform rectTransform = lineImage.rectTransform;
+
+        Vector2 dir = end - start;
+        float distance = dir.magnitude;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        Vector2 midpoint = (start + end) / 2f;
+        rectTransform.anchoredPosition = midpoint;
+        rectTransform.sizeDelta = new Vector2(distance, lineThickness);
+        rectTransform.rotation = Quaternion.Euler(0, 0, angle);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+
+        _currentStrokeSegments.Add(lineObj);
+        _allStrokes.Add(lineObj);
     }
 
     private void DrawLineOnArray(float[] pixels, Vector2 from, Vector2 to, int width, int height, float thickness)
@@ -205,11 +217,10 @@ public class DrawingController : MonoBehaviour
 
     private void RecognizeDrawing()
     {
-        if (_currentLineRenderer == null) return;
+        if (_currentStrokePoints.Count < 2) return;
 
         float[] pixels = CaptureAndProcessDrawing();
         int digit = _networkProcessor.RecognizeDigit(pixels);
-        Debug.Log($"Recognized Digit: {digit}");
 
         if (digit >= 0 && digit < runeDatabase.Count)
         {
@@ -225,24 +236,111 @@ public class DrawingController : MonoBehaviour
 
         if (_runeSequence.Count == 3)
         {
-            var runes = _runeSequence.ToArray();
-            if (runes.Any(r => r.isProjectile))
-            {
-                var origin = transform.position;
-                var direction = (_mainCamera != null ? _mainCamera.transform.forward : transform.forward);
-                runeMagicController.ThrowSpellProjectile(runes, origin, direction);
-            }
-            else
-            {
-                runeMagicController.GenerateSpell(runes, transform.position);
-            }
+            _readySpell = _runeSequence.ToArray();
+            _spellReady = true;
+            _isDrawingMode = false;
+
+            StartCoroutine(AnimateCanvasClose());
 
             _runeSequence.Clear();
             UpdateRuneText();
             UpdateSuggestions();
         }
 
-        ClearDrawing();
+        foreach (var segment in _currentStrokeSegments)
+        {
+            Destroy(segment);
+        }
+
+        _currentStrokePoints.Clear();
+        _currentStrokeSegments.Clear();
+    }
+
+    private IEnumerator AnimateCanvasClose()
+    {
+        if (spellBookCanvas == null) yield break;
+
+        _isAnimatingClose = true;
+
+        RectTransform targetRect = bookContentRect;
+        if (targetRect == null)
+        {
+            targetRect = spellBookCanvas.GetComponent<RectTransform>();
+            if (targetRect == null)
+            {
+                spellBookCanvas.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                _isAnimatingClose = false;
+                yield break;
+            }
+        }
+
+        Vector2 originalPosition = targetRect.anchoredPosition;
+        Vector2 pullUpPosition = originalPosition + new Vector2(0, pullUpDistance);
+
+        float elapsed = 0f;
+        while (elapsed < pullUpDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / pullUpDuration;
+            float easedT = 1f - Mathf.Pow(1f - t, 2f);
+            targetRect.anchoredPosition = Vector2.Lerp(originalPosition, pullUpPosition, easedT);
+            yield return null;
+        }
+        targetRect.anchoredPosition = pullUpPosition;
+
+        elapsed = 0f;
+        Vector2 pullDownPosition = originalPosition - new Vector2(0, Screen.height + 100);
+
+        while (elapsed < pullDownDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / pullDownDuration;
+            float easedT = Mathf.Pow(t, 2f);
+            targetRect.anchoredPosition = Vector2.Lerp(pullUpPosition, pullDownPosition, easedT);
+
+            if (spellBookCanvasGroup != null)
+            {
+                spellBookCanvasGroup.alpha = 1f - easedT;
+            }
+
+            yield return null;
+        }
+
+        spellBookCanvas.SetActive(false);
+
+        targetRect.anchoredPosition = originalPosition;
+        if (spellBookCanvasGroup != null)
+        {
+            spellBookCanvasGroup.alpha = 1f;
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        _isAnimatingClose = false;
+    }
+
+    private void FireReadySpell()
+    {
+        if (!_spellReady || _readySpell == null) return;
+
+        var runes = _readySpell;
+        if (runes.Any(r => r.isProjectile))
+        {
+            var origin = _mainCamera != null ? _mainCamera.transform.position : transform.position;
+            var direction = _mainCamera != null ? _mainCamera.transform.forward : transform.forward;
+            runeMagicController.ThrowSpellProjectile(runes, origin, direction);
+        }
+        else
+        {
+            var targetPosition = _mainCamera != null ? _mainCamera.transform.position + _mainCamera.transform.forward * 5f : transform.position;
+            runeMagicController.GenerateSpell(runes, targetPosition);
+        }
+
+        _spellReady = false;
+        _readySpell = null;
     }
 
     private void Start()
@@ -257,30 +355,73 @@ public class DrawingController : MonoBehaviour
             Debug.LogError("Drawing Area and Rune Magic Controller must be assigned in the inspector.");
             enabled = false;
         }
+
+        if (spellBookCanvas != null)
+        {
+            spellBookCanvas.SetActive(false);
+        }
+
+        if (spellBookCanvasGroup == null && spellBookCanvas != null)
+        {
+            spellBookCanvasGroup = spellBookCanvas.GetComponent<CanvasGroup>();
+        }
+
+        if (bookContentRect == null && spellBookCanvas != null)
+        {
+            RectTransform canvasRect = spellBookCanvas.GetComponent<RectTransform>();
+            if (canvasRect != null && canvasRect.childCount > 0)
+            {
+                bookContentRect = canvasRect.GetChild(0).GetComponent<RectTransform>();
+            }
+        }
+
         UpdateRuneText();
     }
 
     private void StartDrawing()
     {
-        ClearDrawing();
+        _currentStrokePoints.Clear();
+        _currentStrokeSegments.Clear();
     }
 
     private void Update()
     {
+        if (_isAnimatingClose) return;
+
+        if (_spellReady && Input.GetMouseButtonDown(0))
+        {
+            FireReadySpell();
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            _isDrawingMode = !_isDrawingMode;
             if (_isDrawingMode)
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                _isDrawingMode = false;
+                StartCoroutine(AnimateCanvasCloseOnTab());
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                _currentLineRenderer = null;
-                ClearDrawing();
+                _isDrawingMode = true;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                if (spellBookCanvas != null)
+                {
+                    spellBookCanvas.SetActive(true);
+
+                    RectTransform targetRect = bookContentRect != null ? bookContentRect : spellBookCanvas.GetComponent<RectTransform>();
+                    if (targetRect != null)
+                    {
+                        targetRect.anchoredPosition = Vector2.zero;
+                    }
+
+                    if (spellBookCanvasGroup != null)
+                    {
+                        spellBookCanvasGroup.alpha = 1f;
+                    }
+                }
             }
         }
 
@@ -294,12 +435,79 @@ public class DrawingController : MonoBehaviour
             {
                 Draw();
             }
-            else if (Input.GetMouseButtonUp(0) && _currentLineRenderer != null)
+            else if (Input.GetMouseButtonUp(0) && _currentStrokePoints.Count > 0)
             {
                 RecognizeDrawing();
-                _currentLineRenderer = null;
             }
         }
+    }
+
+    private IEnumerator AnimateCanvasCloseOnTab()
+    {
+        if (spellBookCanvas == null) yield break;
+
+        _isAnimatingClose = true;
+
+        RectTransform targetRect = bookContentRect;
+        if (targetRect == null)
+        {
+            targetRect = spellBookCanvas.GetComponent<RectTransform>();
+            if (targetRect == null)
+            {
+                spellBookCanvas.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                _isAnimatingClose = false;
+                yield break;
+            }
+        }
+
+        Vector2 originalPosition = targetRect.anchoredPosition;
+        Vector2 pullUpPosition = originalPosition + new Vector2(0, pullUpDistance);
+
+        float elapsed = 0f;
+        while (elapsed < pullUpDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / pullUpDuration;
+            float easedT = 1f - Mathf.Pow(1f - t, 2f);
+            targetRect.anchoredPosition = Vector2.Lerp(originalPosition, pullUpPosition, easedT);
+            yield return null;
+        }
+        targetRect.anchoredPosition = pullUpPosition;
+
+        elapsed = 0f;
+        Vector2 pullDownPosition = originalPosition - new Vector2(0, Screen.height + 100);
+
+        while (elapsed < pullDownDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / pullDownDuration;
+            float easedT = Mathf.Pow(t, 2f);
+            targetRect.anchoredPosition = Vector2.Lerp(pullUpPosition, pullDownPosition, easedT);
+
+            if (spellBookCanvasGroup != null)
+            {
+                spellBookCanvasGroup.alpha = 1f - easedT;
+            }
+
+            yield return null;
+        }
+
+        ClearDrawing();
+
+        spellBookCanvas.SetActive(false);
+
+        targetRect.anchoredPosition = originalPosition;
+        if (spellBookCanvasGroup != null)
+        {
+            spellBookCanvasGroup.alpha = 1f;
+        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        _isAnimatingClose = false;
     }
 
     private void UpdateRuneText()

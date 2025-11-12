@@ -9,23 +9,19 @@ namespace NeuralNetwork_IHNMAIMS
     {
         public List<RuneCombo> allCombos;
 
-        private void OnEnable()
+        public RuneCombo GetCompletedCombo(RuneData[] sequence)
         {
-            foreach (var combo in allCombos)
-            {
-                combo.isUnlocked = false;
-            }
-        }
+            if (sequence == null || sequence.Length == 0) return null;
+            var currentRuneTypes = sequence.Select(r => r.runeType).ToList();
 
-        public void UnlockRandomTome()
-        {
-            var lockedCombos = allCombos.Where(c => !c.isUnlocked).ToList();
-            if (lockedCombos.Any())
+            foreach (var combo in allCombos.Where(c => c.isUnlocked))
             {
-                var comboToUnlock = lockedCombos[Random.Range(0, lockedCombos.Count)];
-                comboToUnlock.isUnlocked = true;
-                Debug.Log($"Unlocked Tome: {comboToUnlock.comboName}");
+                if (currentRuneTypes.SequenceEqual(combo.runeSequence))
+                {
+                    return combo;
+                }
             }
+            return null;
         }
 
         public List<RuneType> GetNextRuneSuggestions(List<RuneData> currentSequence)
@@ -58,19 +54,24 @@ namespace NeuralNetwork_IHNMAIMS
             return suggestions.Distinct().ToList();
         }
 
-        public RuneCombo GetCompletedCombo(RuneData[] sequence)
+        //LINQ är fire för det här, leggit
+        public void UnlockRandomTome()
         {
-            if (sequence == null || sequence.Length == 0) return null;
-            var currentRuneTypes = sequence.Select(r => r.runeType).ToList();
-
-            foreach (var combo in allCombos.Where(c => c.isUnlocked))
+            var lockedCombos = allCombos.Where(c => !c.isUnlocked).ToList();
+            if (lockedCombos.Any())
             {
-                if (currentRuneTypes.SequenceEqual(combo.runeSequence))
-                {
-                    return combo;
-                }
+                var comboToUnlock = lockedCombos[Random.Range(0, lockedCombos.Count)];
+                comboToUnlock.isUnlocked = true;
+                Debug.Log($"Unlocked Tome: {comboToUnlock.comboName}");
             }
-            return null;
+        }
+
+        private void OnEnable()
+        {
+            foreach (var combo in allCombos)
+            {
+                combo.isUnlocked = false;
+            }
         }
     }
 }
