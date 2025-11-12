@@ -28,6 +28,9 @@ namespace NeuralNetwork_IHNMAIMS
             _rb.useGravity = useGravity;
             _rb.linearVelocity = initialVelocity;
 
+            // Prevent colliding with the player
+            IgnorePlayerCollision();
+
             _initialized = true;
 
             // Start destruction timer
@@ -37,6 +40,8 @@ namespace NeuralNetwork_IHNMAIMS
         private void Awake()
         {
             EnsurePhysics();
+            // also attempt to ignore player collision early if instantiated without Init yet
+            IgnorePlayerCollision();
         }
 
         private void EnsurePhysics()
@@ -55,6 +60,44 @@ namespace NeuralNetwork_IHNMAIMS
                 var col = gameObject.AddComponent<SphereCollider>();
                 col.isTrigger = false;
                 ((SphereCollider)col).radius = 0.3f; // Increased from 0.1f for better collision detection
+            }
+        }
+
+        // Ignore collisions with the player by tag first, then by PlayerController component as a fallback.
+        private void IgnorePlayerCollision()
+        {
+            Collider myCol = GetComponent<Collider>();
+            if (myCol == null) return;
+
+            // First try: find GameObject with tag "Player"
+            GameObject playerGo = null;
+            try
+            {
+                playerGo = GameObject.FindWithTag("Player");
+            }
+            catch { playerGo = null; }
+
+            if (playerGo != null)
+            {
+                var playerCols = playerGo.GetComponentsInChildren<Collider>();
+                foreach (var pc in playerCols)
+                {
+                    if (pc != null)
+                        Physics.IgnoreCollision(myCol, pc, true);
+                }
+                return;
+            }
+
+            // Fallback: find PlayerController in scene (works if your player uses PlayerController)
+            var playerController = FindObjectOfType<PlayerController>();
+            if (playerController != null)
+            {
+                var controllerCols = playerController.GetComponentsInChildren<Collider>();
+                foreach (var pc in controllerCols)
+                {
+                    if (pc != null)
+                        Physics.IgnoreCollision(myCol, pc, true);
+                }
             }
         }
 
