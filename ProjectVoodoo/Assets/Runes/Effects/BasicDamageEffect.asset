@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectName: DamageEffect
   baseDamage: 100
+  validateTargetBeforeDamage: 0

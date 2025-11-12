@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using JetBrains.Annotations;
 using NUnit.Framework;
@@ -10,33 +9,20 @@ using UnityEngine.AI;
 using Unity.AI.Navigation;
 using System.Collections;
 
-
-
 //using static UnityEditor.PlayerSettings;
 public class DungeonGenerationScript : MonoBehaviour
 {
-   
-
     public Loadingscreenscript loadingscreen;
-    void Start()
+
+    private void Start()
     {
-        
         loadingscreen.Show();
         CreateDungeon();
-        StartCoroutine(DrawDungeon()); 
-        
-
-
-
-
-
-
-
-
+        StartCoroutine(DrawDungeon());
     }
-    IEnumerator DrawDungeon()
+
+    private IEnumerator DrawDungeon()
     {
-        
         for (int i = 0; i < dungeonRooms.Count; i++)
         {
             DrawRoom(i, dungeonRooms[i].x, dungeonRooms[i].y);
@@ -57,14 +43,11 @@ public class DungeonGenerationScript : MonoBehaviour
                         GameObject g1 = go1[i];
                         for (int j = 0; j < go2.Count; j++)
                         {
-
                             GameObject g2 = go2[j];
                             for (int d = 0; d < g1.transform.childCount; d++)
                             {
                                 if (g1.transform.GetChild(d) != g1.transform.Find("Roof") && g1.transform.GetChild(d) != g1.transform.Find("Breaker"))
                                 {
-
-
                                     Transform door1 = g1.transform.GetChild(d).Find("Door").transform;
                                     Transform door2;
                                     switch (g1.transform.GetChild(d).name)
@@ -72,21 +55,23 @@ public class DungeonGenerationScript : MonoBehaviour
                                         case "NorthernWall":
                                             door2 = g2.transform.Find("SouthernWall").Find("Door").transform;
                                             break;
+
                                         case "SouthernWall":
                                             door2 = g2.transform.Find("NorthernWall").Find("Door").transform;
                                             break;
+
                                         case "EasternWall":
                                             door2 = g2.transform.Find("WesternWall").Find("Door").transform;
                                             break;
+
                                         case "WesternWall":
                                             door2 = g2.transform.Find("EasternWall").Find("Door").transform;
                                             break;
+
                                         default:
                                             door2 = g2.transform;
                                             break;
-
                                     }
-
 
                                     //if (door1.position.x  +1+ door1.GetComponent<Renderer>().bounds.extents.x > door2.position.x &&
                                     //    door2.position.x + door2.GetComponent<Renderer>().bounds.extents.x > door1.position.x &&
@@ -108,9 +93,7 @@ public class DungeonGenerationScript : MonoBehaviour
                                 if (iterationCounter % 1000 == 0)
                                     yield return null;
                             }
-                            
                         }
-                        
                     }
                     if (availableDoors.Count > 0)
                     {
@@ -120,41 +103,36 @@ public class DungeonGenerationScript : MonoBehaviour
                         doorsToRemove.g1.GetComponent<MeshCollider>().gameObject.SetActive(false);
                         doorsToRemove.g2.GetComponent<MeshCollider>().gameObject.SetActive(false);
                     }
-
                 }
                 if ((p % 5) == 0)
                 {
                     yield return null;
                 }
-                    
             }
 
             float progress = (float)o / roomObjects.Count;
             loadingscreen.UpdateProgress(progress);
             yield return null;
-
         }
 
+        yield return null;
 
-
-        yield return null; 
-
-        
         GetComponent<NavMeshSurface>().BuildNavMesh();
 
-        
         loadingscreen.UpdateProgress(1f);
         yield return null;
 
-
         loadingscreen.Hide();
-        
+
         Player.transform.position = new Vector3(roomObjects[0][roomObjects[0].Count / 2].transform.GetComponent<Renderer>().bounds.center.x,
         roomObjects[0][roomObjects[0].Count / 2].transform.position.y + Player.transform.GetComponent<Renderer>().bounds.extents.y,
         roomObjects[0][roomObjects[0].Count / 2].transform.GetComponent<Renderer>().bounds.center.z);
         isDone = true;
         Debug.Log("Dungeon generated successfully");
-        for (int j = 1; j< roomObjects.Count; j++)
+        // Kod som är kommenterad tillhör Noah och Jag (Melvin) gör endast det här för att jag har 2 timmar innan deadline för att få allting att funka.
+        // Jag hade velat hitta en lösning där jag INTE behöver modifiera mina kollegors kod men här är vi.
+        /*
+        for (int j = 1; j < roomObjects.Count; j++)
         {
             for (int i = 0; i < roomObjects[roomObjects.Count - j].Count; i++)
             {
@@ -166,23 +144,47 @@ public class DungeonGenerationScript : MonoBehaviour
                 }
             }
         }
-        
+        */
+        // Det här är min(M.A) kod:
+        for (int j = 1; j < roomObjects.Count; j++)
+        {
+            for (int i = 0; i < roomObjects[roomObjects.Count - j].Count; i++)
+            {
+                Transform easternWall = roomObjects[roomObjects.Count - j][i].transform.Find("EasternWall");
+                Transform easternDoor = easternWall != null ? easternWall.Find("Door") : null;
+
+                if (easternWall != null && easternWall.gameObject.activeInHierarchy &&
+                    easternDoor != null && easternDoor.gameObject.activeInHierarchy)
+                {
+                    roomObjects[roomObjects.Count - j][i].transform.Find("Breaker").gameObject.SetActive(true);
+                    roomObjects[roomObjects.Count - j][i].transform.Find("Breaker").gameObject.AddComponent<BreakerInteract>();
+                    j = roomObjects.Count;
+                    break;
+                }
+            }
+        }
     }
-    struct Doors
+
+    private struct Doors
     {
         public GameObject g1;
         public GameObject g2;
     }
+
     #region Bös
+
     [Header("Dungeon Settings")]
     public int width = 50;
+
     public int height = 50;
     public int roomCount = 10;
     public int roomMaxSize = 10;
     public int roomMinSize = 5;
     public Room[,] DungeonMap;
+
     [Header("Prefabs")]
     public GameObject floorPrefab;
+
     public GameObject[] roomPrefab;
     public GameObject wallPrefab;
     public GameObject[] Enemies;
@@ -194,13 +196,14 @@ public class DungeonGenerationScript : MonoBehaviour
     public float roomDistance;
     public Transform OldWall;
     public GameObject OldRoom;
-    Vector3 DoorPosition = Vector3.zero;
-    Vector3 DoorDirection = Vector3.zero;
+    private Vector3 DoorPosition = Vector3.zero;
+    private Vector3 DoorDirection = Vector3.zero;
     public List<List<GameObject>> roomObjects = new List<List<GameObject>>();
     public bool isDone = false;
-   
-    #endregion
-    void CreateDungeon()
+
+    #endregion Bös
+
+    private void CreateDungeon()
     {
         width *= (7);
         height *= (7);
@@ -215,27 +218,24 @@ public class DungeonGenerationScript : MonoBehaviour
         }
         for (int i = 0; i < roomCount; i++)
         {
-            
             Room newRoom = new Room();
-           
+
             newRoom.GeneratePrefab();
-            
+
             if (dungeonRooms.Count == 0)
             {
                 int startX = DungeonMap.GetLength(0) / 2 - newRoom.GetRoomSizes().Width / 2;
                 int startY = DungeonMap.GetLength(1) / 2 - newRoom.GetRoomSizes().Depth / 2;
                 //newRoom.GeneratePrefab();
-                if (CanRoomBePlaced(newRoom,startX, startY))
+                if (CanRoomBePlaced(newRoom, startX, startY))
                 {
                     PlaceRoom(newRoom, startX, startY);
                 }
-                
-
             }
             else
             {
                 Room baseRoom = dungeonRooms[UnityEngine.Random.Range(0, dungeonRooms.Count)];
-                
+
                 string direction = new[] { "N", "S", "E", "W" }[UnityEngine.Random.Range(0, 4)];
 
                 int newX = 0;
@@ -251,25 +251,27 @@ public class DungeonGenerationScript : MonoBehaviour
                         doorX = newX;
                         doorY = newY;
                         break;
+
                     case "S":
                         newX = baseRoom.x;
                         newY = baseRoom.y + baseRoom.GetRoomSizes().Depth;
                         doorX = newX;
                         doorY = newY;
                         break;
+
                     case "E":
                         newX = baseRoom.x + baseRoom.GetRoomSizes().Width;
                         newY = baseRoom.y;
                         doorX = newX;
                         doorY = newY;
                         break;
+
                     case "W":
                         newX = baseRoom.x - newRoom.GetRoomSizes().Width;
                         newY = baseRoom.y;
                         doorX = newX;
                         doorY = newY;
                         break;
-
                 }
 
                 //newRoom.GeneratePrefab();
@@ -279,24 +281,22 @@ public class DungeonGenerationScript : MonoBehaviour
                 }
                 else
                 {
-      
                     i--;
                 }
             }
         }
         //SetDoors();
-       
+
         //PrintMapToConsole(DungeonMap);
     }
-   
-    void PlaceRoom(Room room, int posX, int posY)
+
+    private void PlaceRoom(Room room, int posX, int posY)
     {
         {
             for (int i = 0; i < room.roomTiles.GetLength(0); i++)
             {
                 for (int j = 0; j < room.roomTiles.GetLength(1); j++)
                 {
-                    
                     int mapX = i + posX;
                     int mapY = j + posY;
 
@@ -306,139 +306,109 @@ public class DungeonGenerationScript : MonoBehaviour
                     {
                         room.ShouldSpawnEnemy = true;
                     }
-                    
-                    
-                        
-                    
-                        
-
                 }
             }
             room.x = posX;
             room.y = posY;
 
             dungeonRooms.Add(room);
-
         }
     }
-    void DrawRoom(int q, int posX, int posY)
+
+    private void DrawRoom(int q, int posX, int posY)
     {
         Room room = dungeonRooms[q];
         List<GameObject> roomCollection = new List<GameObject>();
-            for (int i = 0; i < room.roomTiles.GetLength(0); i++)
+        for (int i = 0; i < room.roomTiles.GetLength(0); i++)
+        {
+            for (int j = 0; j < room.roomTiles.GetLength(1); j++)
             {
-                for (int j = 0; j < room.roomTiles.GetLength(1); j++)
+                int mapX = i + posX;
+                int mapY = j + posY;
+                GameObject floor = Instantiate(roomPrefab[0]);
+
+                floor.GetComponent<Room>().enabled = false;
+                Renderer[] renderers = floor.transform.GetComponentsInChildren<Renderer>();
+                float width = 0;
+                float depth = 0;
+
+                Bounds combinedBounds = renderers[0].bounds;
+                for (int r = 0; r < renderers.Length; r++)
                 {
-                    int mapX = i + posX;
-                    int mapY = j + posY;
-                    GameObject floor = Instantiate(roomPrefab[0]);
-                    
-                    floor.GetComponent<Room>().enabled = false;
-                    Renderer[] renderers = floor.transform.GetComponentsInChildren<Renderer>();
-                    float width = 0;
-                    float depth = 0;
+                    combinedBounds.Encapsulate(renderers[r].bounds);
+                }
+                width += combinedBounds.size.x;
+                depth += combinedBounds.size.z;
 
-                    Bounds combinedBounds = renderers[0].bounds;
-                    for (int r = 0; r < renderers.Length; r++)
-                    {
-                        combinedBounds.Encapsulate(renderers[r].bounds);
-                    }
-                    width += combinedBounds.size.x;
-                    depth += combinedBounds.size.z;
+                floor.transform.position = new Vector3(mapX * width, 0, mapY * depth);
 
-                    floor.transform.position = new Vector3(mapX * width, 0, mapY * depth);
-                
-                    for (int Y = -1; Y <= 1; Y++)
+                for (int Y = -1; Y <= 1; Y++)
+                {
+                    Vector2 curPos = new Vector2(i, j);
+                    Vector2 modPos = new Vector2(curPos.x, curPos.y + Y);
+                    if (modPos.y >= 0 && modPos.y <= room.roomTiles.GetLength(1) - 1)
                     {
-                        Vector2 curPos = new Vector2(i, j);
-                        Vector2 modPos = new Vector2(curPos.x, curPos.y + Y);
-                        if (modPos.y >= 0 && modPos.y <= room.roomTiles.GetLength(1)-1)
+                        if (room.roomTiles[(int)modPos.x, (int)modPos.y] == 1 || room.roomTiles[(int)modPos.x, (int)modPos.y] == 2)
                         {
-
-                            
-                            if (room.roomTiles[(int)modPos.x, (int)modPos.y] == 1 || room.roomTiles[(int)modPos.x, (int)modPos.y] == 2)
+                            switch (Y)
                             {
+                                case -1:
 
-                                switch (Y)
-                                {
-                                    case -1:
+                                    floor.transform.Find("SouthernWall").gameObject.SetActive(false);
+                                    break;
 
-                                        floor.transform.Find("SouthernWall").gameObject.SetActive(false);
-                                        break;
-                                    case 1:
-                                        floor.transform.Find("NorthernWall").gameObject.SetActive(false);
-                                        break;
-
-                                }
-
-
-
-                            }
-                        
-                    }
-                    }
-                    for (int X = -1; X <= 1; X++)
-                    
-                    {
-                        Vector2 curPos = new Vector2(i, j);
-                        Vector2 modPos = new Vector2(curPos.x + X, curPos.y);
-                        if (modPos.x >= 0 && modPos.x <= room.roomTiles.GetLength(0) - 1)
-                        {
-
-
-                            if (room.roomTiles[(int)modPos.x, (int)modPos.y] == 1 || room.roomTiles[(int)modPos.x, (int)modPos.y] == 2)
-                            {
-                                //Transform nRoom = roomTIles[(int)modPos.x, (int)modPos.y].transform.Find("walls").transform;
-                                switch (X)
-                                {
-                                    case -1:
-                                        floor.transform.Find("WesternWall").gameObject.SetActive(false);
-
-                                        break;
-                                    case 1:
-                                        floor.transform.Find("EasternWall").gameObject.SetActive(false);
-
-                                        break;
-
-
-
-
-                                }
+                                case 1:
+                                    floor.transform.Find("NorthernWall").gameObject.SetActive(false);
+                                    break;
                             }
                         }
-                    
+                    }
                 }
-                    roomCollection.Add(floor);
-                    floor.transform.SetParent(transform);
-                    
-                }
+                for (int X = -1; X <= 1; X++)
 
+                {
+                    Vector2 curPos = new Vector2(i, j);
+                    Vector2 modPos = new Vector2(curPos.x + X, curPos.y);
+                    if (modPos.x >= 0 && modPos.x <= room.roomTiles.GetLength(0) - 1)
+                    {
+                        if (room.roomTiles[(int)modPos.x, (int)modPos.y] == 1 || room.roomTiles[(int)modPos.x, (int)modPos.y] == 2)
+                        {
+                            //Transform nRoom = roomTIles[(int)modPos.x, (int)modPos.y].transform.Find("walls").transform;
+                            switch (X)
+                            {
+                                case -1:
+                                    floor.transform.Find("WesternWall").gameObject.SetActive(false);
+
+                                    break;
+
+                                case 1:
+                                    floor.transform.Find("EasternWall").gameObject.SetActive(false);
+
+                                    break;
+                            }
+                        }
+                    }
+                }
+                roomCollection.Add(floor);
+                floor.transform.SetParent(transform);
             }
-            if (room.ShouldSpawnEnemy)
+        }
+        if (room.ShouldSpawnEnemy)
         {
             Debug.Log("EnemyShouldSpanw");
             int r = UnityEngine.Random.Range(0, Enemies.Length);
             int s = UnityEngine.Random.Range(0, roomCollection.Count);
             GameObject g = Instantiate(Enemies[r]);
             g.transform.SetParent(null);
-            
+
             Vector3 center = roomCollection[s].transform.GetComponent<Renderer>().bounds.center;
-            g.transform.position =  new Vector3(center.x, roomCollection[s].transform.position.y + g.transform.GetComponent<Renderer>().bounds.extents.y, center.z);
-
+            g.transform.position = new Vector3(center.x, roomCollection[s].transform.position.y + g.transform.GetComponent<Renderer>().bounds.extents.y, center.z);
         }
-        
+
         roomObjects.Add(roomCollection);
-
-       
-
-       
-
-
-
-
-
     }
-    bool CanRoomBePlaced(Room room, int posX, int posY)
+
+    private bool CanRoomBePlaced(Room room, int posX, int posY)
     {
         for (int i = 0; i < room.roomTiles.GetLength(0); i++)
         {
@@ -458,5 +428,4 @@ public class DungeonGenerationScript : MonoBehaviour
         }
         return true;
     }
- 
 }

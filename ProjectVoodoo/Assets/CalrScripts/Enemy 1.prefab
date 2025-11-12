@@ -32,11 +32,12 @@ Transform:
   m_GameObject: {fileID: 429924434395201548}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1213.0847, y: 617.0522, z: 123.26862}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6575048456454383753}
+  - {fileID: 7998752052709448308}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8387612556047799502
@@ -128,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  deathEffect: {fileID: 0}
-  hitEffect: {fileID: 0}
+  deathEffect: {fileID: 3770002944079978900}
+  hitEffect: {fileID: 3770002944079978900}
 --- !u!114 &7209122038775154730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,8 +157,8 @@ MonoBehaviour:
     m_Bits: 0
   patrolRadius: 10000
   patrolDelay: 3
-  patrolColor: {r: 0, g: 1, b: 0, a: 1}
-  followColor: {r: 1, g: 0, b: 0, a: 1}
+  patrolColor: {r: 1, g: 1, b: 1, a: 1}
+  followColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &4748497738598488516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +181,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 0.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -192,6 +193,37 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!1 &3770002944079978900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7998752052709448308}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7998752052709448308
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770002944079978900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4824881418783984901}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8085643448252266651
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6575048456454383753}
   - component: {fileID: 8382517144979525215}
+  - component: {fileID: 3450754502163763853}
   m_Layer: 3
   m_Name: Renderer
   m_TagString: Untagged
@@ -218,7 +251,7 @@ Transform:
   m_GameObject: {fileID: 8085643448252266651}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.83000004, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -268,7 +301,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 80be8d9b982d30c418d2b8a130b1c60f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 942169ca5b5e54d4a91a481192ca5fa5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -279,3 +312,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3450754502163763853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085643448252266651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233524ba573037248b85b929293e6b52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frames:
+  - {fileID: -416817565, guid: cecb9c0badaf4cf478608a642eb37cfa, type: 3}
+  - {fileID: 383832881, guid: cecb9c0badaf4cf478608a642eb37cfa, type: 3}
+  - {fileID: 2056284901, guid: cecb9c0badaf4cf478608a642eb37cfa, type: 3}
+  - {fileID: -354572012, guid: cecb9c0badaf4cf478608a642eb37cfa, type: 3}
+  framesPerSecond: 8
+  loop: 1
+  playOnAwake: 1
+  startPaused: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cecb9c0badaf4cf478608a642eb37cfa
+guid: 2a07bbc1ecb46494bb0a766034987671
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,89 +97,133 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spritesheet_0
+      name: hand_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 128
-        width: 64
-        height: 128
+        y: 84
+        width: 33
+        height: 84
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bddf3218b2acb949b1c96aa6e8ea736
-      internalID: -416817565
+      spriteID: 8a283b68a7c63e04dba7b8d6dc2e665c
+      internalID: 2098109638
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet_1
+      name: hand_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 128
-        width: 64
-        height: 128
+        x: 33
+        y: 84
+        width: 33
+        height: 84
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c39698b82c43504387b821713b4fbec
-      internalID: 383832881
+      spriteID: 78c946d9b8917ea46bf15df9e45f9f3c
+      internalID: -4171104
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet_2
+      name: hand_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 128
-        width: 64
-        height: 128
+        x: 66
+        y: 84
+        width: 33
+        height: 84
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 11bcdd44c220e414c9c1fa8684979050
-      internalID: 2056284901
+      spriteID: a3c76220581dff04db76a1f01c1357a4
+      internalID: 1067557759
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet_3
+      name: hand_3
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 128
+        width: 33
+        height: 84
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b8d9b6f372a3a744bc9863ee093e980
-      internalID: -354572012
+      spriteID: b98045e5881a2ac418f7b69583c14636
+      internalID: 880185306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hand_4
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 33
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af2d700269bc67b4797fc21224920b79
+      internalID: -933201755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hand_5
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 0
+        width: 33
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c4ebc18c951a1041ad4865ff22d9c01
+      internalID: -1040262103
       vertices: []
       indices: 
       edges: []
@@ -188,7 +232,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4644f154c154847429a7c3c3dfcbad31
+    spriteID: b1316d2cc5dab9f4097e815c0805d12b
     internalID: 0
     vertices: []
     indices: 
@@ -198,10 +242,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      spritesheet_0: -416817565
-      spritesheet_1: 383832881
-      spritesheet_2: 2056284901
-      spritesheet_3: -354572012
+      hand_0: 2098109638
+      hand_1: -4171104
+      hand_2: 1067557759
+      hand_3: 880185306
+      hand_4: -933201755
+      hand_5: -1040262103
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

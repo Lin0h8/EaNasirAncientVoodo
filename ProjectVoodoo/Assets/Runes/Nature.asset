@@ -392,7 +392,7 @@ MonoBehaviour:
   subEmitterType: 0
   isProjectile: 1
   projectilePrefab: {fileID: 8448738330675822032, guid: fb9a40310c9a9b943bd831df0dfee61b, type: 3}
-  projectileSpeed: 20
+  projectileSpeed: 5
   projectileLifetime: 10
   projectileUseGravity: 1
   projectileArc: 0.2

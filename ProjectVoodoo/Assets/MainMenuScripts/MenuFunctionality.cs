@@ -28,4 +28,9 @@ public class MenuFunctionality : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void Reset()
+    {
+        ScoreCounter.Instance.ResetScore();
+    }
 }

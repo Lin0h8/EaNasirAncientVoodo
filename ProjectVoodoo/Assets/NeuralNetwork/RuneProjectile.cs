@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 namespace NeuralNetwork_IHNMAIMS
 {
@@ -11,6 +12,9 @@ namespace NeuralNetwork_IHNMAIMS
         private float lifeTime = 10f;
         private float speed = 20f;
         private bool useGravity = true;
+        private float ignoreCollisionTime = 0.2f;
+        private float spawnTime;
+
         public RuneMagicController Controller { get; private set; }
         public RuneData[] Runes { get; private set; }
 
@@ -21,6 +25,7 @@ namespace NeuralNetwork_IHNMAIMS
             this.speed = speed;
             this.lifeTime = lifeTime;
             this.useGravity = useGravity;
+            spawnTime = Time.time;
 
             EnsurePhysics();
 
@@ -36,6 +41,7 @@ namespace NeuralNetwork_IHNMAIMS
 
         private void Awake()
         {
+            spawnTime = Time.time;
             EnsurePhysics();
             IgnorePlayerCollision();
         }
@@ -79,6 +85,12 @@ namespace NeuralNetwork_IHNMAIMS
                     if (pc != null)
                         Physics.IgnoreCollision(myCol, pc, true);
                 }
+
+                var characterController = playerGo.GetComponent<CharacterController>();
+                if (characterController != null)
+                {
+                    Debug.Log("Player has CharacterController - using time-based collision ignore");
+                }
                 return;
             }
 
@@ -96,6 +108,17 @@ namespace NeuralNetwork_IHNMAIMS
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (Time.time - spawnTime < ignoreCollisionTime)
+            {
+                return;
+            }
+
+            if (collision.gameObject.CompareTag("Player") ||
+                collision.gameObject.GetComponent<PlayerController>() != null)
+            {
+                return;
+            }
+
             if (_triggered) return;
             _triggered = true;
 

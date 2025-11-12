@@ -6,6 +6,8 @@ namespace NeuralNetwork_IHNMAIMS
 {
     public class RuneMagicController : MonoBehaviour
     {
+        public const float PARTICLE_SCALE = 0.2f;
+
         public Material defaultParticleMaterial;
         public Material defaultTrailMaterial;
         public TomeManager tomeManager;
@@ -25,7 +27,7 @@ namespace NeuralNetwork_IHNMAIMS
             var duration = runes.Max(r => r.systemDuration);
             var startLifetime = PreserveCurveOrAverage(runes, r => r.startLifetime, dominantRune);
             var startSpeed = PreserveCurveOrAverage(runes, r => r.startSpeed, dominantRune);
-            var startSize = PreserveCurveOrAverage(runes, r => r.startSize, dominantRune);
+            var startSize = ScaleCurve(PreserveCurveOrAverage(runes, r => r.startSize, dominantRune), PARTICLE_SCALE);
             var startRotation = PreserveCurveOrAverage(runes, r => r.startRotation, dominantRune);
             var gravity = runes.Average(r => r.gravityModifier);
 
@@ -50,7 +52,7 @@ namespace NeuralNetwork_IHNMAIMS
 
             bool trailsEnabled = runes.Any(r => r.trailsEnabled);
             float trailLifetime = trailsEnabled ? runes.Where(r => r.trailsEnabled).Average(r => r.trailLifetime) : 0f;
-            float trailWidth = trailsEnabled ? runes.Where(r => r.trailsEnabled).Average(r => r.trailWidth) : 0f;
+            float trailWidth = trailsEnabled ? runes.Where(r => r.trailsEnabled).Average(r => r.trailWidth) * PARTICLE_SCALE : 0f;
             var trailGradient = trailsEnabled ? CreateBlendedGradient(runes.Where(r => r.trailsEnabled)) : new ParticleSystem.MinMaxGradient(Color.white);
 
             bool collisionEnabled = runes.Any(r => r.collisionEnabled);
@@ -67,7 +69,7 @@ namespace NeuralNetwork_IHNMAIMS
             bool lightsEnabled = runes.Any(r => r.lightsEnabled);
             var lightPrefab = dominantRune.lightPrefab;
             float lightRatio = lightsEnabled ? runes.Where(r => r.lightsEnabled).Average(r => r.lightRatio) : 0.1f;
-            float lightRange = lightsEnabled ? runes.Where(r => r.lightsEnabled).Average(r => r.lightRange) : 5f;
+            float lightRange = lightsEnabled ? runes.Where(r => r.lightsEnabled).Average(r => r.lightRange) * PARTICLE_SCALE : 5f;
             float lightIntensity = lightsEnabled ? runes.Where(r => r.lightsEnabled).Average(r => r.lightIntensity) : 1f;
 
             bool subEmittersEnabled = runes.Any(r => r.subEmittersEnabled);
@@ -75,7 +77,7 @@ namespace NeuralNetwork_IHNMAIMS
             var subEmitterType = dominantRune.subEmitterType;
 
             var shapeType = dominantRune.shapeType;
-            float shapeRadius = dominantRune.shapeRadius;
+            float shapeRadius = dominantRune.shapeRadius * PARTICLE_SCALE;
             float shapeAngle = dominantRune.shapeAngle;
             float randomDirAmount = dominantRune.randomizeDirection ? dominantRune.randomizeDirectionAmount : 0f;
 
@@ -404,6 +406,11 @@ namespace NeuralNetwork_IHNMAIMS
 
             Vector3 velocity = direction * speed + Vector3.up * (speed * arc);
             projectile.Init(this, runes, velocity, speed, lifetime, useGravity);
+        }
+
+        private ParticleSystem.MinMaxCurve ScaleCurve(ParticleSystem.MinMaxCurve curve, float scale)
+        {
+            return new ParticleSystem.MinMaxCurve(curve.constantMin * scale, curve.constantMax * scale);
         }
 
         private ParticleSystem.MinMaxCurve AverageMinMaxCurve(IEnumerable<ParticleSystem.MinMaxCurve> curves)
