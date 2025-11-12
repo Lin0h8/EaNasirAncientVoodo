@@ -359,7 +359,8 @@ MonoBehaviour:
     m_ConstantMax: 0
   dampen: 0.1
   damage: 10
-  onHitEffects: []
+  onHitEffects:
+  - {fileID: 11400000, guid: 67b82dd4b37165347b8dabc8ab43078b, type: 2}
   textureSheetEnabled: 0
   numTilesX: 1
   numTilesY: 1

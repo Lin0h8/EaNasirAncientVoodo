@@ -5,15 +5,14 @@ namespace NeuralNetwork_IHNMAIMS
     [RequireComponent(typeof(Rigidbody))]
     public class RuneProjectile : MonoBehaviour
     {
-        private float speed = 20f;
-        private float lifeTime = 10f;
-        private bool useGravity = true;
-
+        private bool _initialized = false;
         private Rigidbody _rb;
         private bool _triggered;
-
-        public RuneData[] Runes { get; private set; }
+        private float lifeTime = 10f;
+        private float speed = 20f;
+        private bool useGravity = true;
         public RuneMagicController Controller { get; private set; }
+        public RuneData[] Runes { get; private set; }
 
         public void Init(RuneMagicController controller, RuneData[] runes, Vector3 initialVelocity, float speed, float lifeTime, bool useGravity)
         {
@@ -22,18 +21,22 @@ namespace NeuralNetwork_IHNMAIMS
             this.speed = speed;
             this.lifeTime = lifeTime;
             this.useGravity = useGravity;
+
             EnsurePhysics();
+
+            // Apply gravity setting after ensuring physics
+            _rb.useGravity = useGravity;
             _rb.linearVelocity = initialVelocity;
+
+            _initialized = true;
+
+            // Start destruction timer
+            Destroy(gameObject, lifeTime);
         }
 
         private void Awake()
         {
             EnsurePhysics();
-        }
-
-        private void Start()
-        {
-            Destroy(gameObject, lifeTime);
         }
 
         private void EnsurePhysics()
@@ -43,6 +46,7 @@ namespace NeuralNetwork_IHNMAIMS
                 _rb = GetComponent<Rigidbody>();
                 if (_rb == null) _rb = gameObject.AddComponent<Rigidbody>();
                 _rb.interpolation = RigidbodyInterpolation.Interpolate;
+                _rb.collisionDetectionMode = CollisionDetectionMode.Continuous; // Better collision detection
                 _rb.useGravity = useGravity;
             }
 
@@ -50,7 +54,7 @@ namespace NeuralNetwork_IHNMAIMS
             {
                 var col = gameObject.AddComponent<SphereCollider>();
                 col.isTrigger = false;
-                ((SphereCollider)col).radius = 0.1f;
+                ((SphereCollider)col).radius = 0.3f; // Increased from 0.1f for better collision detection
             }
         }
 
@@ -65,12 +69,24 @@ namespace NeuralNetwork_IHNMAIMS
                 hitPoint = collision.GetContact(0).point;
             }
 
+            Debug.Log($"RuneProjectile hit: {collision.gameObject.name} at {hitPoint}");
+
             if (Controller != null && Runes != null && Runes.Length > 0)
             {
                 Controller.GenerateSpell(Runes, hitPoint);
             }
 
             Destroy(gameObject);
+        }
+
+        private void Start()
+        {
+            // Only destroy if not initialized (fallback)
+            if (!_initialized)
+            {
+                Debug.LogWarning($"RuneProjectile on {gameObject.name} was not initialized via Init(). Destroying.");
+                Destroy(gameObject, 1f);
+            }
         }
     }
 }

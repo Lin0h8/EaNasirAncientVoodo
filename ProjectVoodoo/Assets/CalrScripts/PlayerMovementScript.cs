@@ -8,12 +8,15 @@ public class PlayerMovementScrript : MonoBehaviour
     public float speed = 7f;
     public float gravity = -19.62f;
     public float jumpHeight = 2f;
+    public float airControlMultiplier = 0.01f;
 
     public Transform groundcheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
     Vector3 velocity;
+    Vector3 lastMoveDirection;
+
     public bool isGrounded;
 
     void Jump()
@@ -36,20 +39,44 @@ public class PlayerMovementScrript : MonoBehaviour
     {
         GroundCheck();
 
-        if (Input.GetButton("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        Vector3 inputDirection = transform.right * x + transform.forward * z;
 
-        controller.Move(move * speed * Time.deltaTime);
+        if (isGrounded)
+        {
+            lastMoveDirection = inputDirection.normalized;
+        }
+        else
+        {
+            if (inputDirection.magnitude > 0.1f)
+            {
+                lastMoveDirection = Vector3.Lerp(
+                    lastMoveDirection,
+                    inputDirection.normalized,
+                    airControlMultiplier * Time.deltaTime * 10f);
+            }
+            else
+            {
+                lastMoveDirection = Vector3.Lerp(
+                    lastMoveDirection,
+                    Vector3.zero,
+                    airControlMultiplier * Time.deltaTime * 5f);
+            }
+        }
+
+        Vector3 horizontalMove = lastMoveDirection * speed;
 
         velocity.y += gravity * Time.deltaTime;
 
-        controller.Move(velocity * Time.deltaTime);
+        Vector3 finalMove = horizontalMove + Vector3.up * velocity.y;
+
+        controller.Move(finalMove * Time.deltaTime);
     }
 }
